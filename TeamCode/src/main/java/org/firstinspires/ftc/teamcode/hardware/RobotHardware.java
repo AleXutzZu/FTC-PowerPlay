@@ -1,5 +1,120 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
-public class RobotHardware {
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import lombok.Getter;
+
+/**
+ * <h1>This class can be used to define all the specific hardware for the Perpetuum Mobile Robot.</h1>
+ * This is NOT an OpMode.
+ * <br>
+ * <p>Used Motors (driving & lift): <a href="https://www.gobilda.com/yellow-jacket-planetary-gear-motors/">5203 Series goBILDA Planetary Gear Motors</a></p>
+ * <h2>Motors</h2>
+ * <h3>Motors for driving the robot</h3>
+ * <pre>Right front motor:                                  <i>"right_front"</i></pre>
+ * <pre>Right back motor:                                   <i>"right_back"</i></pre>
+ * <pre>Left front motor:                                   <i>"left_front"</i></pre>
+ * <pre>Left back motor:                                    <i>"right_back"</i></pre>
+ * <h3>Motor for using the elevator</h3>
+ * <pre>Elevator motor:                                 <i>"elevator_motor"</i></pre>
+ * <br>
+ * <h2>Sensors and misc</h2>
+ * <h3>2M Distance Sensors</h3>
+ * <pre>Left side sensor                                    <i>"left_2m"</i></pre>
+ * <pre>Right side sensor                                   <i>"right_2m</i></pre>
+ * <pre>Back sensor                                         <i>"back_2m</i></pre>
+ * <h3>Misc</h3>
+ * <pre>BNO55IMU Gyroscope                                  <i>"imu"</i></pre>
+ */
+public class RobotHardware {
+    /**
+     * The OpMode that requested the hardware map
+     */
+    private final OpMode opMode;
+
+    public RobotHardware(OpMode opMode) {
+        this.opMode = opMode;
+    }
+
+    @Getter
+    private DcMotor leftFrontMotor = null;
+    @Getter
+    private DcMotor leftBackMotor = null;
+    @Getter
+    private DcMotor rightFrontMotor = null;
+    @Getter
+    private DcMotor rightBackMotor = null;
+    @Getter
+    private Rev2mDistanceSensor right2mSensor = null;
+    @Getter
+    private Rev2mDistanceSensor left2mSensor = null;
+    @Getter
+    private Rev2mDistanceSensor back2mSensor = null;
+    @Getter
+    private BNO055IMU imu = null;
+
+    /**
+     * This is the function that we initialize the Motors with
+     **/
+    public void initDrivetrainMotors() {
+        leftFrontMotor = opMode.hardwareMap.get(DcMotor.class, "left_front");
+        leftBackMotor = opMode.hardwareMap.get(DcMotor.class, "left_back");
+        rightFrontMotor = opMode.hardwareMap.get(DcMotor.class, "right_front");
+        rightBackMotor = opMode.hardwareMap.get(DcMotor.class, "right_back");
+
+        leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    /**
+     * This is the function that we initialize the Sensors with
+     */
+    public void initSensors() {
+        left2mSensor = (Rev2mDistanceSensor) opMode.hardwareMap.get(DistanceSensor.class, "left_2m");
+        right2mSensor = (Rev2mDistanceSensor) opMode.hardwareMap.get(DistanceSensor.class, "right_2m");
+        back2mSensor = (Rev2mDistanceSensor) opMode.hardwareMap.get(DistanceSensor.class, "back_2m");
+    }
+
+    /**
+     * Initializes the Inertial Measurement Unit found in the Rev Expansion Hub
+     */
+    public void initIMU() {
+        imu = opMode.hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        imu.initialize(parameters);
+
+        //TODO Remap axis if the orientation of the hub using the IMU is not placed with the +Z upwards
+    }
+
+    /**
+     * Initialize all required hardware for the Autonomous Period
+     */
+    public void initAutonomous() {
+        initDrivetrainMotors();
+        initIMU();
+        initSensors();
+    }
+
+    /**
+     * Initialize all required hardware for the Tele Op Period
+     */
+    public void initTeleOp() {
+        initDrivetrainMotors();
+    }
 }
