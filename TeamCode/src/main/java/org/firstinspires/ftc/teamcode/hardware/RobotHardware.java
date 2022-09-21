@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-
-import org.firstinspires.ftc.teamcode.hardware.internal.GOBILDA312RPMMotor;
 
 import lombok.Getter;
 
@@ -43,13 +42,13 @@ public class RobotHardware {
     }
 
     @Getter
-    private GOBILDA312RPMMotor leftFrontMotor = null;
+    private DcMotorEx leftFrontMotor = null;
     @Getter
-    private GOBILDA312RPMMotor leftBackMotor = null;
+    private DcMotorEx leftBackMotor = null;
     @Getter
-    private GOBILDA312RPMMotor rightFrontMotor = null;
+    private DcMotorEx rightFrontMotor = null;
     @Getter
-    private GOBILDA312RPMMotor rightBackMotor = null;
+    private DcMotorEx rightBackMotor = null;
     @Getter
     private Rev2mDistanceSensor right2mSensor = null;
     @Getter
@@ -63,24 +62,24 @@ public class RobotHardware {
      * This is the function that we initialize the Motors with
      **/
     public void initDrivetrainMotors() {
-        leftFrontMotor = new GOBILDA312RPMMotor(opMode.hardwareMap, "left_front");
-        leftBackMotor = new GOBILDA312RPMMotor(opMode.hardwareMap, "left_back");
-        rightFrontMotor = new GOBILDA312RPMMotor(opMode.hardwareMap, "right_front");
-        rightBackMotor = new GOBILDA312RPMMotor(opMode.hardwareMap, "right_back");
+        leftFrontMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_front");
+        leftBackMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_back");
+        rightFrontMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_front");
+        rightBackMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_back");
 
 
-        leftFrontMotor.setInverted(true);
-        leftBackMotor.setInverted(true);
+        leftFrontMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        leftBackMotor.setDirection(DcMotorEx.Direction.REVERSE);
 
-        leftFrontMotor.setRunMode(Motor.RunMode.PositionControl);
-        rightFrontMotor.setRunMode(Motor.RunMode.PositionControl);
-        leftBackMotor.setRunMode(Motor.RunMode.PositionControl);
-        rightBackMotor.setRunMode(Motor.RunMode.PositionControl);
+        leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        leftFrontMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        rightFrontMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        leftBackMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        rightBackMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        leftFrontMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        rightFrontMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        leftBackMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        rightBackMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
     /**
