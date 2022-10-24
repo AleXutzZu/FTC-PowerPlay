@@ -12,9 +12,10 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 class EmptyPipeline extends OpenCvPipeline {
     private Mat lastResult;
+
     @Override
     public Mat processFrame(Mat input) {
-        lastResult = input;
+        input.copyTo(lastResult);
         return input;
     }
 
@@ -30,7 +31,7 @@ public class WebcamTest extends LinearOpMode {
         final int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         final WebcamName webcam = hardwareMap.get(WebcamName.class, "Webcam 1");
         final OpenCvCamera camera = OpenCvCameraFactory.getInstance().createWebcam(webcam, cameraMonitorViewId);
-        OpenCvPipeline pipeline = new EmptyPipeline();
+        EmptyPipeline pipeline = new EmptyPipeline();
 
         camera.setPipeline(pipeline);
 
@@ -48,8 +49,14 @@ public class WebcamTest extends LinearOpMode {
 
         waitForStart();
 
+        int count = 0;
+
         while (opModeIsActive()) {
             sleep(20);
+            if (gamepad1.a) {
+                pipeline.saveMatToDiskFullPath(pipeline.getLastResult(), "sdcard/FIRST/data/" + count + "-saved-frame.png");
+                count++;
+            }
         }
     }
 }
