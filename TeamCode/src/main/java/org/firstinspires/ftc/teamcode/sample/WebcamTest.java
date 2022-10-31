@@ -11,7 +11,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 class EmptyPipeline extends OpenCvPipeline {
-    private Mat lastResult;
+    private final Mat lastResult = new Mat();
 
     @Override
     public Mat processFrame(Mat input) {
