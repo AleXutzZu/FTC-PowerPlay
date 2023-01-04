@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import lombok.Getter;
@@ -21,7 +22,8 @@ import lombok.Getter;
  * <pre>Left front motor:                                   <i>"left_front"</i></pre>
  * <pre>Left back motor:                                    <i>"right_back"</i></pre>
  * <h3>Motor for using the elevator</h3>
- * <pre>Elevator motor:                                 <i>"elevator_motor"</i></pre>
+ * <pre>Left elevator motor:                             <i>"left_elevator"</i></pre>
+ * <pre>Right elevator motor:                           <i>"right_elevator"</i></pre>
  * <br>
  * <h2>Sensors and misc</h2>
  * <h3>2M Distance Sensors</h3>
@@ -50,6 +52,10 @@ public class RobotHardware {
     @Getter
     private DcMotorEx rightBackMotor = null;
     @Getter
+    private DcMotorEx leftElevatorMotor = null;
+    @Getter
+    private DcMotorEx rightElevatorMotor = null;
+    @Getter
     private Rev2mDistanceSensor right2mSensor = null;
     @Getter
     private Rev2mDistanceSensor left2mSensor = null;
@@ -66,20 +72,30 @@ public class RobotHardware {
         leftBackMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_back");
         rightFrontMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_front");
         rightBackMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_back");
+        leftElevatorMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_elevator");
+        rightElevatorMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_elevator");
 
 
         leftFrontMotor.setDirection(DcMotorEx.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorEx.Direction.REVERSE);
+
+        leftElevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightElevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        leftElevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightElevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         leftFrontMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightFrontMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         leftBackMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        leftElevatorMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        rightElevatorMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
     /**
