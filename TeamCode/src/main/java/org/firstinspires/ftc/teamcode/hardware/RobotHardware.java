@@ -75,12 +75,22 @@ public class RobotHardware {
         leftElevatorMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_elevator");
         rightElevatorMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_elevator");
 
-
         leftFrontMotor.setDirection(DcMotorEx.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        rightBackMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        rightFrontMotor.setDirection(DcMotorEx.Direction.FORWARD);
 
         leftElevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         rightElevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftElevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightElevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
