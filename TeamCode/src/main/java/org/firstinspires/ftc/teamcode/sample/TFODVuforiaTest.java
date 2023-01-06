@@ -44,11 +44,10 @@ public class TFODVuforiaTest extends LinearOpMode {
      * and paste it in to your code on the next line, between the double quotes.
      */
     private static final String VUFORIA_KEY =
-            "AeiZh4P/////AAABmWPx1Eh9skV+o4UUquhHJKiA19nN8rHJ87jDLZJA01WyY2yHfX5mAvjYv69I4B2Ty1zliXk5" +
-                    "aA2vETUNDBjfpJMdCwuQ+Z0upUnpxLwabeEuqq93EPXQgrGbqsLF1ErYetuqWY1V7k42WWHGCZTjTTQM39" +
-                    "bPM6O2SGZPAjg33Zm45L48JeZWFrOaOrYvRSBCCv68nidvIAFQ+Bn8frVygQkqbLroYVvfq+LUT0aklvE2w+" +
-                    "ZuLIkF2Ex9FqbTLORiDu5buokIvB7cAIc9k+oDW8B0G75yzRpLdLW1PASnLHHubpW3NM5nzMbl5Ks7HEmy+" +
-                    "aTU3KQjyB3tyUNw0x2Cf6M8kqKPd6QiNn+bqs9R+++z";
+            "AXhQwhT/////AAABmajs48ny5UHptNvgXujuJ3spGMiMx1mw45nu5wOcYDzyfkKrQY09KXc2Nzohgc9DZFRqHyogXOSNz7DErpVP5l" +
+                    "WUDe5oN6z9IequWU/mHIPbyWHwuPzqF7p8otEHk++z4lSz3/F5e/+Igpv46CP1wIgquFedrbLekYljYu5ccPn7QsWtfSNxs" +
+                    "wS1DKek7Dilsc8C62LUqM6OJzeVzSVcUdzidY07bAeVpji6xpy9AbdSVhUa6N5lGlNhM20EGrLmN7eVzKjKYY4IRqF8eH5T" +
+                    "aKHb/f+zUMBOGGsq98ACB9bx+XuMr0si67JpRn3y+M/iUhkkESZz3UBOwK8f4S0R0y4ypS4tGzXoETdv0EN2hB/G";
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
