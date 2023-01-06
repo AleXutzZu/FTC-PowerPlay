@@ -2,25 +2,27 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop.movement;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
+@TeleOp(name = "Omni Movement", group = "Movement")
 public class OmniMovement extends LinearOpMode {
-    private RobotHardware robotHardware;
+    private final RobotHardware robotHardware = new RobotHardware(this);
 
     protected void drive() {
         double max;
 
         // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
-        double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
-        double lateral =  gamepad1.left_stick_x;
-        double yaw     =  gamepad1.right_stick_x;
+        double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+        double lateral = gamepad1.left_stick_x;
+        double yaw = gamepad1.right_stick_x;
 
         // Combine the joystick requests for each axis-motion to determine each wheel's power.
         // Set up a variable for each drive wheel to save the power level for telemetry.
-        double targetLeftFrontPower  = axial + lateral + yaw;
+        double targetLeftFrontPower = axial + lateral + yaw;
         double targetRightFrontPower = axial - lateral - yaw;
-        double targetLeftBackPower   = axial - lateral + yaw;
-        double targetRightBackPower  = axial + lateral - yaw;
+        double targetLeftBackPower = axial - lateral + yaw;
+        double targetRightBackPower = axial + lateral - yaw;
 
         // Normalize the values so no wheel power exceeds 100%
         // This ensures that the robot maintains the desired motion.
@@ -29,10 +31,10 @@ public class OmniMovement extends LinearOpMode {
         max = Math.max(max, Math.abs(targetRightBackPower));
 
         if (max > 1.0) {
-            targetLeftFrontPower  /= max;
+            targetLeftFrontPower /= max;
             targetRightFrontPower /= max;
-            targetLeftBackPower   /= max;
-            targetRightBackPower  /= max;
+            targetLeftBackPower /= max;
+            targetRightBackPower /= max;
         }
 
         // This is test code:
@@ -62,10 +64,19 @@ public class OmniMovement extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //Init Phase
-        robotHardware = new RobotHardware(this) ;
         robotHardware.initTeleOp();
+
+        waitForStart();
+
         while (opModeIsActive()) {
             drive();
+
+            telemetry.addData("Left back motor encoder output:", robotHardware.getLeftBackMotor().getCurrentPosition());
+            telemetry.addData("Left front motor encoder output:", robotHardware.getLeftFrontMotor().getCurrentPosition());
+            telemetry.addData("Right back motor encoder output:", robotHardware.getRightBackMotor().getCurrentPosition());
+            telemetry.addData("Right front motor encoder output:", robotHardware.getRightFrontMotor().getCurrentPosition());
+
+            telemetry.update();
         }
     }
 }
