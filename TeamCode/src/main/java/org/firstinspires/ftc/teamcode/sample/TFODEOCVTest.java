@@ -24,11 +24,10 @@ public class TFODEOCVTest extends LinearOpMode {
             "3 Panel"
     };
 
-    //TODO: Fix with actual values
-    private static final int WIDTH = 0;
-    private static final int HEIGHT = 0;
-    private static final float FOCAL_LENGTH_X = 0f;
-    private static final float FOCAL_LENGTH_Y = 0f;
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 448;
+    private static final float FOCAL_LENGTH_X = 676.128f;
+    private static final float FOCAL_LENGTH_Y = 676.128f;
 
     @Override
     public void runOpMode() throws InterruptedException {
