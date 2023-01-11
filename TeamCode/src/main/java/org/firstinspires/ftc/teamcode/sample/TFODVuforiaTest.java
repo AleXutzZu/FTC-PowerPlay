@@ -86,13 +86,13 @@ public class TFODVuforiaTest extends LinearOpMode {
 
         /* Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
+        telemetry.addData("Camera", vuforia.getCameraCalibration().toString());
         telemetry.update();
         waitForStart();
 
         while (opModeIsActive()) {
             if (tfod != null) {
                 //Print camera information
-                telemetry.addData("Camera", vuforia.getCameraCalibration().toString());
 
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
