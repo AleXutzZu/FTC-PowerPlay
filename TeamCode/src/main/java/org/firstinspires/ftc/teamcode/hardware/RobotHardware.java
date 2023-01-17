@@ -79,7 +79,7 @@ public class RobotHardware {
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftElevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightElevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightElevatorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
