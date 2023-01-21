@@ -79,6 +79,12 @@ public class RobotHardware {
         leftClawServo = opMode.hardwareMap.get(Servo.class, "left_claw");
         rightClawServo = opMode.hardwareMap.get(Servo.class, "right_claw");
 
+        leftClawServo.setDirection(Servo.Direction.REVERSE);
+
+        //Approx 30 deg - 120 deg
+        leftClawServo.scaleRange(1f / 60f, 1f / 15f);
+        rightClawServo.scaleRange(1f / 60f, 1f / 15f);
+
         //TODO: Update the class documentation to contain the servos and test if any of them should be reversed
 
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
