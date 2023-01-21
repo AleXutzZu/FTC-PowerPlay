@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop.test;
 
-import com.arcrobotics.ftclib.gamepad.ButtonReader;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Test Servo", group = "Debugging")
 public class TestServo extends LinearOpMode {
@@ -38,10 +36,10 @@ public class TestServo extends LinearOpMode {
                 if (position < 0) position = 1;
             } else if (gamepad.wasJustReleased(GamepadKeys.Button.DPAD_RIGHT)) {
                 position += 0.01f;
+                if (position > 1) position = 0;
             }
 
             if (gamepad.wasJustReleased(GamepadKeys.Button.A)) {
-                //Clip position to 0-1
                 servo.setPosition(position);
             }
 

@@ -5,13 +5,13 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
 @TeleOp(name = "Test Claw", group = "Debugging")
 public class TestClaw extends LinearOpMode {
     private final RobotHardware robotHardware = new RobotHardware(this);
+    private final ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -24,10 +24,12 @@ public class TestClaw extends LinearOpMode {
 
         waitForStart();
 
+        runtime.reset();
         while (opModeIsActive()) {
 
             telemetry.addData(">", "Press X to toggle claws");
             telemetry.addData("State", toggleClaws.getState());
+            telemetry.addData("Runtime", runtime.toString());
 
             if (gamepad.wasJustReleased(GamepadKeys.Button.X)) {
                 boolean state = toggleClaws.getState();
