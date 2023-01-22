@@ -4,8 +4,12 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
+
+import lombok.Getter;
 
 /**
  * This class provides enhanced functionality for TeleOp.
@@ -58,11 +62,16 @@ public abstract class TeleOpControl extends LinearOpMode implements Limbs, Drive
      */
     protected final RobotHardware robotHardware = new RobotHardware(this);
 
+    @Getter
+    private boolean clawState = false;
+
+
     @Override
     public final void runOpMode() throws InterruptedException {
         robotHardware.initTeleOp();
         mainGamepad = new GamepadEx(gamepad1);
         secondaryGamepad = new GamepadEx(gamepad2);
+        useClaws();
         if (invertedGamepads) {
             GamepadEx aux = secondaryGamepad;
             secondaryGamepad = mainGamepad;
@@ -165,16 +174,21 @@ public abstract class TeleOpControl extends LinearOpMode implements Limbs, Drive
      */
     protected abstract void run();
 
-    //TODO: Bretan - implement this method.
-    //Hints: Add a private state boolean for the claws (named clawsState) to this class.
-    //Add a getter for this state
-    //Now implement the useClaws method to make use of that state and update it internally
-    //At the initialization of the robot,set the claws to the open position for now (and update the state)
-    //Use true to mark that the claws are open and false to mark that the claws are closed
-    //Make sure to read the docs and return true of false as it says in the docs
     @Override
     public boolean useClaws() {
-        return false;
+        robotHardware.initDrivetrainMotors();
+
+        if (clawState) {
+            robotHardware.getLeftClawServo().setPosition(Servo.MIN_POSITION);
+            robotHardware.getRightClawServo().setPosition(Servo.MIN_POSITION);
+            clawState = false;
+        } else {
+            robotHardware.getLeftClawServo().setPosition(Servo.MAX_POSITION);
+            robotHardware.getRightClawServo().setPosition(Servo.MAX_POSITION);
+            clawState = true;
+        }
+
+        return clawState;
     }
 
     //TODO: Alex & Luca - implement this method after measuring the required values
