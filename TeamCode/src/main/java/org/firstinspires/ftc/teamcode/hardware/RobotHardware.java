@@ -30,6 +30,10 @@ import lombok.Getter;
  * <h3>Misc</h3>
  * <pre>BNO55IMU Gyroscope                                  <i>"imu"</i></pre>
  */
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import lombok.Getter;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 public class RobotHardware {
     /**
      * The OpMode that requested the hardware map
@@ -64,6 +68,9 @@ public class RobotHardware {
     private Rev2mDistanceSensor back2mSensor = null;
     @Getter
     private BNO055IMU imu = null;
+    @Getter
+    private WebcamName webcam = null;
+
 
     /**
      * This is the function that we initialize the Motors with
@@ -146,6 +153,7 @@ public class RobotHardware {
         initDrivetrainMotors();
         initIMU();
         initSensors();
+        initWebcam();
     }
 
     /**
@@ -153,5 +161,9 @@ public class RobotHardware {
      */
     public void initTeleOp() {
         initDrivetrainMotors();
+    }
+
+    public void initWebcam() {
+        webcam = opMode.hardwareMap.get(WebcamName.class, "Webcam 1");
     }
 }
