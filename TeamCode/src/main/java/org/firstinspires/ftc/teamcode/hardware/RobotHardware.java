@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -7,6 +6,36 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
 import lombok.Getter;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import lombok.Getter;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
+/**
+ * <h1>This class can be used to define all the specific hardware for the Perpetuum Mobile Robot.</h1>
+ * This is NOT an OpMode.
+ * <br>
+ * <p>Used Motors (driving & lift): <a href="https://www.gobilda.com/yellow-jacket-planetary-gear-motors/">5203 Series goBILDA Planetary Gear Motors</a></p>
+ * <h2>Motors</h2>
+ * <h3>Motors for driving the robot</h3>
+ * <pre>Right front motor:                                  <i>"right_front"</i></pre>
+ * <pre>Right back motor:                                   <i>"right_back"</i></pre>
+ * <pre>Left front motor:                                   <i>"left_front"</i></pre>
+ * <pre>Left back motor:                                    <i>"right_back"</i></pre>
+ * <h3>Motor for using the elevator</h3>
+ * <pre>Left elevator motor:                             <i>"left_elevator"</i></pre>
+ * <pre>Right elevator motor:                           <i>"right_elevator"</i></pre>
+ * <br>
+ *  <h2> Servos </h2>
+ *  <pre> Left claw servo:                                  <i> "left_claw"</i> </pre>
+ *  <pre> Right claw servo:                                <i> "right_claw"</i> </pre>
+ * <h2>Sensors and misc</h2>
+ * <h3>2M Distance Sensors</h3>
+ * <pre>Left side sensor                                    <i>"left_2m"</i></pre>
+ * <pre>Right side sensor                                   <i>"right_2m</i></pre>
+ * <pre>Back sensor                                         <i>"back_2m</i></pre>
+ * <h3>Misc</h3>
+ * <pre>BNO55IMU Gyroscope                                  <i>"imu"</i></pre>
+ */
+
 
 public class RobotHardware {
     /**
@@ -81,6 +110,7 @@ public class RobotHardware {
 
         leftElevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightElevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
