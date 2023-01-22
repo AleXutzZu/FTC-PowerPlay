@@ -3,10 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.*;
 
 import lombok.Getter;
 
@@ -56,6 +53,10 @@ public class RobotHardware {
     @Getter
     private DcMotorEx rightElevatorMotor = null;
     @Getter
+    private Servo leftClawServo = null;
+    @Getter
+    private Servo rightClawServo = null;
+    @Getter
     private Rev2mDistanceSensor right2mSensor = null;
     @Getter
     private Rev2mDistanceSensor left2mSensor = null;
@@ -74,6 +75,17 @@ public class RobotHardware {
         rightBackMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_back");
         leftElevatorMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_elevator");
         rightElevatorMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_elevator");
+
+        leftClawServo = opMode.hardwareMap.get(Servo.class, "left_claw");
+        rightClawServo = opMode.hardwareMap.get(Servo.class, "right_claw");
+
+        leftClawServo.setDirection(Servo.Direction.REVERSE);
+
+        //Approx 30 deg - 120 deg
+        leftClawServo.scaleRange(1f / 60f, 1f / 15f);
+        rightClawServo.scaleRange(1f / 60f, 1f / 15f);
+
+        //TODO: Update the class documentation to contain the servos and test if any of them should be reversed
 
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
