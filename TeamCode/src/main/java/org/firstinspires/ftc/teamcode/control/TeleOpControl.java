@@ -5,11 +5,9 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
-
+import lombok.Getter;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
-
-import lombok.Getter;
 
 /**
  * This class provides enhanced functionality for TeleOp.
@@ -197,9 +195,29 @@ public abstract class TeleOpControl extends LinearOpMode implements Limbs, Drive
 
     }
 
-    //TODO: Alex - implement this method
     @Override
     public void drive(double axial, double lateral, double yaw) {
+        double targetLeftFrontPower = axial + lateral + yaw;
+        double targetRightFrontPower = axial - lateral - yaw;
+        double targetLeftBackPower = axial - lateral + yaw;
+        double targetRightBackPower = axial + lateral - yaw;
 
+        //Find max of all powers
+        double max = Math.max(Math.abs(targetLeftFrontPower), Math.abs(targetRightFrontPower));
+        max = Math.max(max, Math.abs(targetLeftBackPower));
+        max = Math.max(max, Math.abs(targetRightBackPower));
+
+        //If max is greater than 1, scale all powers down
+        if (max > 1) {
+            targetLeftFrontPower /= max;
+            targetRightFrontPower /= max;
+            targetLeftBackPower /= max;
+            targetRightBackPower /= max;
+        }
+
+        robotHardware.getLeftFrontMotor().setPower(targetLeftFrontPower);
+        robotHardware.getRightFrontMotor().setPower(targetRightFrontPower);
+        robotHardware.getLeftBackMotor().setPower(targetLeftBackPower);
+        robotHardware.getRightBackMotor().setPower(targetRightBackPower);
     }
 }
