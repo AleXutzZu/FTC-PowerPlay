@@ -18,8 +18,6 @@ import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
  * {@link TeleOpControl#debugMainGamepad()} and {@link  TeleOpControl#debugSecondaryGamepad()}. Only after the execution of
  * these 3 methods is the telemetry updated.
  */
-//TODO: Add RobotHardware and initialize it for TeleOp.
-// This can only be done after this branch is rebased on top of the main branch after implement_robot_hardware is merged
 public abstract class TeleOpControl extends LinearOpMode {
     /**
      * Main gamepad or the "driver gamepad". Assigned by default to gamepad1 of the LinearOpMode.
