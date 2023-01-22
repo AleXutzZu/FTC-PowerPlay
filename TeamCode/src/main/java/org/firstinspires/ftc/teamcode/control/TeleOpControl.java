@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
 /**
  * This class provides enhanced functionality for TeleOp.
@@ -54,8 +55,14 @@ public abstract class TeleOpControl extends LinearOpMode {
      */
     protected boolean skipStart = true;
 
+    /**
+     * The robot hardware. This is the only hardware that is initialized by default.
+     */
+    protected final RobotHardware robotHardware = new RobotHardware(this);
+
     @Override
     public final void runOpMode() throws InterruptedException {
+        robotHardware.initTeleOp();
         mainGamepad = new GamepadEx(gamepad1);
         secondaryGamepad = new GamepadEx(gamepad2);
         if (invertedGamepads) {
