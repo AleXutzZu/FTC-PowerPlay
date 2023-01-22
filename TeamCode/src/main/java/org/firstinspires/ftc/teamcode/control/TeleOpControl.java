@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
  * {@link TeleOpControl#debugMainGamepad()} and {@link  TeleOpControl#debugSecondaryGamepad()}. Only after the execution of
  * these 3 methods is the telemetry updated.
  */
-public abstract class TeleOpControl extends LinearOpMode implements Limbs {
+public abstract class TeleOpControl extends LinearOpMode implements Limbs, Drivetrain {
     /**
      * Main gamepad or the "driver gamepad". Assigned by default to gamepad1 of the LinearOpMode.
      *
@@ -180,6 +180,12 @@ public abstract class TeleOpControl extends LinearOpMode implements Limbs {
     //TODO: Alex & Luca - implement this method after measuring the required values
     @Override
     public void useElevator(ElevatorLevel level) {
+
+    }
+
+    //TODO: Alex - implement this method
+    @Override
+    public void drive(double axial, double lateral, double yaw) {
 
     }
 }
