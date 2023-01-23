@@ -6,8 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
 import lombok.Getter;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import lombok.Getter;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 /**
  * <h1>This class can be used to define all the specific hardware for the Perpetuum Mobile Robot.</h1>
@@ -24,9 +22,9 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
  * <pre>Left elevator motor:                             <i>"left_elevator"</i></pre>
  * <pre>Right elevator motor:                           <i>"right_elevator"</i></pre>
  * <br>
- *  <h2> Servos </h2>
- *  <pre> Left claw servo:                                  <i> "left_claw"</i> </pre>
- *  <pre> Right claw servo:                                <i> "right_claw"</i> </pre>
+ * <h2> Servos </h2>
+ * <pre> Left claw servo:                                  <i> "left_claw"</i> </pre>
+ * <pre> Right claw servo:                                <i> "right_claw"</i> </pre>
  * <h2>Sensors and misc</h2>
  * <h3>2M Distance Sensors</h3>
  * <pre>Left side sensor                                    <i>"left_2m"</i></pre>
@@ -86,17 +84,6 @@ public class RobotHardware {
         leftElevatorMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_elevator");
         rightElevatorMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_elevator");
 
-        leftClawServo = opMode.hardwareMap.get(Servo.class, "left_claw");
-        rightClawServo = opMode.hardwareMap.get(Servo.class, "right_claw");
-
-        leftClawServo.setDirection(Servo.Direction.REVERSE);
-
-        //Approx 30 deg - 120 deg
-        leftClawServo.scaleRange(1f / 60f, 1f / 15f);
-        rightClawServo.scaleRange(1f / 60f, 1f / 15f);
-
-        //TODO: Update the class documentation to contain the servos and test if any of them should be reversed
-
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -129,6 +116,23 @@ public class RobotHardware {
     }
 
     /**
+     * This is the function that we initialize the Claws with
+     */
+
+    public void initClaws() {
+
+        leftClawServo = opMode.hardwareMap.get(Servo.class, "left_claw");
+        rightClawServo = opMode.hardwareMap.get(Servo.class, "right_claw");
+
+        leftClawServo.setDirection(Servo.Direction.REVERSE);
+
+        //Approx 30 deg - 120 deg
+        leftClawServo.scaleRange(1f / 60f, 1f / 15f);
+        rightClawServo.scaleRange(1f / 60f, 1f / 15f);
+
+    }
+
+    /**
      * This is the function that we initialize the Sensors with
      */
     public void initSensors() {
@@ -154,6 +158,7 @@ public class RobotHardware {
      */
     public void initAutonomous() {
         initDrivetrainMotors();
+        initClaws();
         initIMU();
         initSensors();
         initWebcam();
@@ -164,6 +169,7 @@ public class RobotHardware {
      */
     public void initTeleOp() {
         initDrivetrainMotors();
+        initClaws();
     }
 
     public void initWebcam() {
