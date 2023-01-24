@@ -40,4 +40,23 @@ public interface Limbs {
      * @param level the level to move the elevator to
      */
     void useElevator(ElevatorLevel level);
+
+    /**
+     * Moves the robot by power. Before calling this method {@link #isSafeToMove()} should be called to ensure that the robot is not at one of the limits.
+     *
+     * @param power the power to move the robot. Positive power will drive the motor forward (i.e. raise the elevator), whilst negative power will drive the motor backwards (i.e. lower the elevator)
+     */
+    void useElevator(double power);
+
+    /**
+     * Checks if the robot is within the allowed range to be manually moved using power.
+     *
+     * @return true if the robot is safe to move, false otherwise
+     */
+    boolean isSafeToMove();
+
+    /**
+     * Homes the elevator at the base of the robot.
+     */
+    void home();
 }

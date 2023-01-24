@@ -196,6 +196,21 @@ public abstract class TeleOpControl extends LinearOpMode implements Limbs, Drive
     }
 
     @Override
+    public void useElevator(double power) {
+
+    }
+
+    @Override
+    public boolean isSafeToMove() {
+        return false;
+    }
+
+    @Override
+    public void home() {
+
+    }
+
+    @Override
     public void drive(double axial, double lateral, double yaw) {
         double targetLeftFrontPower = axial + lateral + yaw;
         double targetRightFrontPower = axial - lateral - yaw;
@@ -219,5 +234,13 @@ public abstract class TeleOpControl extends LinearOpMode implements Limbs, Drive
         robotHardware.getRightFrontMotor().setPower(targetRightFrontPower);
         robotHardware.getLeftBackMotor().setPower(targetLeftBackPower);
         robotHardware.getRightBackMotor().setPower(targetRightBackPower);
+    }
+
+    @Override
+    public void drive(double leftFront, double rightFront, double leftBack, double rightBack) {
+        robotHardware.getLeftFrontMotor().setPower(leftFront);
+        robotHardware.getRightFrontMotor().setPower(rightFront);
+        robotHardware.getLeftBackMotor().setPower(leftBack);
+        robotHardware.getRightBackMotor().setPower(rightBack);
     }
 }
