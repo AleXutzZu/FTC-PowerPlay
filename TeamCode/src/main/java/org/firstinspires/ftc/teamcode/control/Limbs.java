@@ -1,30 +1,40 @@
 package org.firstinspires.ftc.teamcode.control;
 
+import lombok.Getter;
+
 /**
  * Every implementor has to be able to operate the limbs of the robot with these 2 methods.
  */
 public interface Limbs {
 
     /**
-     * Elevator levels for the robot
+     * Elevator levels for the robot (in cm).
      */
     enum ElevatorLevel {
         /**
          * The lowest level of the elevator (at the base of the robot)
          */
-        BASE,
+        BASE(0),
         /**
          * The low level of the elevator (slightly above the shortest bar)
          */
-        LOW,
+        LOW(35.2),
         /**
          * The middle level of the elevator (slightly above the medium bar)
          */
-        MIDDLE,
+        MIDDLE(60.8),
         /**
          * The highest level of the elevator (slightly above the tallest bar)
          */
-        HIGH
+        HIGH(85.9);
+
+        @Getter
+        private double height = 0;
+
+
+        ElevatorLevel(double height) {
+            this.height = height;
+        }
     }
 
     /**
@@ -59,4 +69,15 @@ public interface Limbs {
      * Homes the elevator at the base of the robot.
      */
     void home();
+
+    /**
+     * Advances the robot if it is busy.
+     */
+    void advance();
+
+    /**
+     * Checks if the elevator motors are busy advancing to a position
+     * @return true if the motors are busy, false otherwise
+     */
+    boolean isBusy();
 }
