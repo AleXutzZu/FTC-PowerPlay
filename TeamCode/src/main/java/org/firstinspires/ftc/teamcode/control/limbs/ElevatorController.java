@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.control.limbs;
 
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import lombok.Getter;
 import org.firstinspires.ftc.teamcode.control.Elevator;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
@@ -21,6 +23,10 @@ public class ElevatorController implements Elevator {
         //TODO: Find these values
         pidController = new PIDController(0, 0, 0);
         pidController.setTolerance(tolerance);
+
+        PIDFCoefficients coefficients = new PIDFCoefficients(pidController.getP(), pidController.getI(), pidController.getD(), pidController.getF());
+
+        robotHardware.getLeftElevatorMotor().setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, coefficients);
     }
 
     @Override

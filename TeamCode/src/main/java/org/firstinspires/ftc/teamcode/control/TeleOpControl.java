@@ -5,8 +5,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.control.limbs.ClawsController;
-import org.firstinspires.ftc.teamcode.control.limbs.ElevatorController;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
 /**
@@ -59,9 +57,6 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
      * The robot hardware. This is the only hardware that is initialized by default.
      */
     protected final RobotHardware robotHardware = new RobotHardware(this);
-
-    protected final ElevatorController elevatorController = new ElevatorController(robotHardware);
-    protected final ClawsController clawsController = new ClawsController(robotHardware);
 
     @Override
     public final void runOpMode() throws InterruptedException {

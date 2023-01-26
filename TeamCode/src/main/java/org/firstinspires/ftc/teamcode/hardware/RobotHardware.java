@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
 import lombok.Getter;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.control.limbs.ClawsController;
+import org.firstinspires.ftc.teamcode.control.limbs.ElevatorController;
 
 /**
  * <h1>This class can be used to define all the specific hardware for the Perpetuum Mobile Robot.</h1>
@@ -71,7 +73,10 @@ public class RobotHardware {
     private BNO055IMU imu = null;
     @Getter
     private WebcamName webcam = null;
-
+    @Getter
+    private ElevatorController elevatorController = null;
+    @Getter
+    private ClawsController clawsController = null;
 
     /**
      * This is the function that we initialize the Motors with
@@ -113,6 +118,9 @@ public class RobotHardware {
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftElevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightElevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        elevatorController = new ElevatorController(this);
+        clawsController = new ClawsController(this);
     }
 
     /**
