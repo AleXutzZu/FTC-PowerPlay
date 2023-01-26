@@ -1,0 +1,41 @@
+package org.firstinspires.ftc.teamcode.opmodes.teleop.test;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import org.firstinspires.ftc.teamcode.control.limbs.ElevatorController;
+import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
+import org.firstinspires.ftc.teamcode.util.Constants;
+
+@Config
+@TeleOp(name = "Calibrate Elevator PID", group = "Debugging")
+public class CalibrateElevatorPID extends LinearOpMode {
+
+    public static double kP = 0, kI = 0, kD = 0;
+    public static double position = 40;
+    private final RobotHardware robotHardware = new RobotHardware(this);
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        robotHardware.initDrivetrainMotors();
+        ElevatorController elevatorController = new ElevatorController(robotHardware);
+
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        waitForStart();
+
+
+        elevatorController.setTarget((int) (position * Constants.GOBILDA_5203_TICKS_PER_CM));
+        while (opModeIsActive()) {
+
+            telemetry.addData("targetPosition", position);
+            telemetry.addData("actualPosition", elevatorController.getCurrentPosition());
+
+            elevatorController.getPidController().setPID(kP, kI, kD);
+
+            elevatorController.update();
+        }
+    }
+}
