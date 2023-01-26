@@ -14,6 +14,7 @@ public class Elevator implements ElevatorControl {
         this.robotHardware = robotHardware;
         //TODO: Find these values
         pidController = new PIDController(0, 0, 0);
+        pidController.setTolerance(150);
     }
 
     @Override
