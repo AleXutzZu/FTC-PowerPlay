@@ -4,10 +4,12 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import lombok.Getter;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
+import org.firstinspires.ftc.teamcode.util.Constants;
 
 /**
  * This class provides enhanced functionality for TeleOp.
@@ -62,6 +64,7 @@ public abstract class TeleOpControl extends LinearOpMode implements Limbs, Drive
 
     @Getter
     private boolean clawState = false;
+    private boolean elevatorState = false;
 
 
     @Override
@@ -192,22 +195,58 @@ public abstract class TeleOpControl extends LinearOpMode implements Limbs, Drive
     //TODO: Alex & Luca - implement this method after measuring the required values
     @Override
     public void useElevator(ElevatorLevel level) {
+        if (!isBusy()) {
+            int height = (int) (level.getHeight() * Constants.GOBILDA_5203_TICKS_PER_CM);
 
+            robotHardware.getLeftElevatorMotor().setTargetPosition(height);
+            robotHardware.getRightElevatorMotor().setTargetPosition(height);
+            elevatorState = true;
+            robotHardware.getLeftElevatorMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robotHardware.getRightElevatorMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
     }
 
     @Override
     public void useElevator(double power) {
-
+        if (!isBusy()) {
+            robotHardware.getLeftElevatorMotor().setPower(power);
+            robotHardware.getRightElevatorMotor().setPower(power);
+        }
     }
 
     @Override
     public boolean isSafeToMove() {
-        return false;
+        //Check if the current position of both motors are under the max and min from GOBILDA_5203
+        return robotHardware.getLeftElevatorMotor().getCurrentPosition() < Constants.GOBILDA_5203_MAX_HEIGHT_TICKS &&
+                robotHardware.getLeftElevatorMotor().getCurrentPosition() > Constants.GOBILDA_5203_MIN_HEIGHT_TICKS &&
+                robotHardware.getRightElevatorMotor().getCurrentPosition() < Constants.GOBILDA_5203_MAX_HEIGHT_TICKS &&
+                robotHardware.getRightElevatorMotor().getCurrentPosition() > Constants.GOBILDA_5203_MIN_HEIGHT_TICKS;
     }
 
     @Override
     public void home() {
 
+    }
+
+    @Override
+    public void advance() {
+        if (isBusy()) {
+            robotHardware.getLeftElevatorMotor().setPower(0.5);
+            robotHardware.getRightElevatorMotor().setPower(0.5);
+        } else {
+            if (elevatorState) {
+                elevatorState = false;
+                robotHardware.getLeftElevatorMotor().setPower(0);
+                robotHardware.getRightElevatorMotor().setPower(0);
+                robotHardware.getRightElevatorMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robotHardware.getLeftElevatorMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+        }
+    }
+
+    @Override
+    public boolean isBusy() {
+        return robotHardware.getLeftElevatorMotor().isBusy() || robotHardware.getRightElevatorMotor().isBusy();
     }
 
     @Override
