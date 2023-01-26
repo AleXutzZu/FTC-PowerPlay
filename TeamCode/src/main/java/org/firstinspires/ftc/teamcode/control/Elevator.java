@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.control;
 
 import lombok.Getter;
 
+/**
+ * Interface for communicating with the elevator.
+ */
 public interface Elevator {
 
     enum ElevatorLevel {
@@ -31,13 +34,37 @@ public interface Elevator {
         }
     }
 
+    /**
+     * Homes the elevator and resets the encoder output
+     */
     void home();
 
+    /**
+     * Updates the motor power to match the target. Must be called in a loop.
+     */
     void update();
 
-    void setPosition(int position);
+    /**
+     * Sets the target position in encoder ticks
+     * @param target the desired target the elevator should maintain
+     */
+    void setTarget(int target);
 
-    void setPosition(ElevatorLevel level);
+    /**
+     * Sets the target position based on the levels of the junctions
+     * @param level the desired level
+     */
+    void setTarget(ElevatorLevel level);
 
-    int getPosition();
+    /**
+     * Returns the target position the elevator was requested to maintain
+     * @return the target position in encoder ticks
+     */
+    int getTarget();
+
+    /**
+     * Returns the current position of the elevator
+     * @return the current position in encoder ticks
+     */
+    int getCurrentPosition();
 }

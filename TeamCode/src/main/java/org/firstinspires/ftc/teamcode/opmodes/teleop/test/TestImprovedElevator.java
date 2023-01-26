@@ -29,7 +29,7 @@ public class TestImprovedElevator extends TeleOpControl {
         Elevator.ElevatorLevel level = Elevator.ElevatorLevel.values()[index];
 
         if (mainGamepad.wasJustReleased(GamepadKeys.Button.X)) {
-            elevatorController.setPosition(level);
+            elevatorController.setTarget(level);
         }
 
         telemetry.addData("Target left", robotHardware.getLeftElevatorMotor().getTargetPosition());
