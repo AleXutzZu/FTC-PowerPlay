@@ -9,7 +9,7 @@ public final class Constants {
     /**
      * GOBILDA 5203 Series Yellow Jacket Planetary Gear Motor PPR
      */
-    public static final double GOBILDA_5203_TICKS_PER_REVOLUTION = 4 * 384.5;
+    public static final double GOBILDA_5203_TICKS_PER_REVOLUTION = 384.5;
     /**
      * GOBILDA 5203 Series Yellow Jacket Planetary Gear Motor Ticks/cm
      */
