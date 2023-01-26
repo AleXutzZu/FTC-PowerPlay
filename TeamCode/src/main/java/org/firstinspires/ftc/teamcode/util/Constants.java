@@ -24,4 +24,9 @@ public final class Constants {
      * The minimum height that the elevator shall reach by setting power manually.
      */
     public static final int GOBILDA_5203_MIN_HEIGHT_TICKS = 0;
+
+    /**
+     * Maximum velocity of the motor in theoretical conditions, expressed as ticks/second.
+     */
+    public static final double GOBILDA_5203_MAX_TICKS_PER_SECOND = 435 * GOBILDA_5203_TICKS_PER_REVOLUTION / 60;
 }
