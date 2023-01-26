@@ -38,4 +38,6 @@ public interface ElevatorControl {
     void setPosition(int position);
 
     void setPosition(ElevatorLevel level);
+
+    int getPosition();
 }

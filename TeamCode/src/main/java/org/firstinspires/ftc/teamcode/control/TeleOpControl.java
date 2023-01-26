@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import lombok.Getter;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.control.limbs.Claws;
+import org.firstinspires.ftc.teamcode.control.limbs.Elevator;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.util.Constants;
 
@@ -22,7 +24,7 @@ import org.firstinspires.ftc.teamcode.util.Constants;
  * {@link TeleOpControl#debugMainGamepad()} and {@link  TeleOpControl#debugSecondaryGamepad()}. Only after the execution of
  * these 3 methods is the telemetry updated.
  */
-public abstract class TeleOpControl extends LinearOpMode implements Limbs, Drivetrain {
+public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
     /**
      * Main gamepad or the "driver gamepad". Assigned by default to gamepad1 of the LinearOpMode.
      *
@@ -62,17 +64,15 @@ public abstract class TeleOpControl extends LinearOpMode implements Limbs, Drive
      */
     protected final RobotHardware robotHardware = new RobotHardware(this);
 
-    @Getter
-    private boolean clawState = false;
-    private boolean elevatorState = false;
-
+    protected final Elevator elevator = new Elevator(robotHardware);
+    protected final Claws claws = new Claws(robotHardware);
 
     @Override
     public final void runOpMode() throws InterruptedException {
         robotHardware.initTeleOp();
         mainGamepad = new GamepadEx(gamepad1);
         secondaryGamepad = new GamepadEx(gamepad2);
-        useClaws();
+//        claws.useClaws();
         if (invertedGamepads) {
             GamepadEx aux = secondaryGamepad;
             secondaryGamepad = mainGamepad;
@@ -174,80 +174,6 @@ public abstract class TeleOpControl extends LinearOpMode implements Limbs, Drive
      * In each iteration this method is called before the debug methods are called.
      */
     protected abstract void run();
-
-    @Override
-    public boolean useClaws() {
-        robotHardware.initDrivetrainMotors();
-
-        if (clawState) {
-            robotHardware.getLeftClawServo().setPosition(Servo.MIN_POSITION);
-            robotHardware.getRightClawServo().setPosition(Servo.MIN_POSITION);
-            clawState = false;
-        } else {
-            robotHardware.getLeftClawServo().setPosition(Servo.MAX_POSITION);
-            robotHardware.getRightClawServo().setPosition(Servo.MAX_POSITION);
-            clawState = true;
-        }
-
-        return clawState;
-    }
-
-    //TODO: Alex & Luca - implement this method after measuring the required values
-    @Override
-    public void useElevator(ElevatorLevel level) {
-        if (!isBusy()) {
-            int height = (int) (level.getHeight() * Constants.GOBILDA_5203_TICKS_PER_CM);
-
-            robotHardware.getLeftElevatorMotor().setTargetPosition(height);
-            robotHardware.getRightElevatorMotor().setTargetPosition(height);
-            elevatorState = true;
-            robotHardware.getLeftElevatorMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robotHardware.getRightElevatorMotor().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
-    }
-
-    @Override
-    public void useElevator(double power) {
-        if (!isBusy()) {
-            robotHardware.getLeftElevatorMotor().setPower(power);
-            robotHardware.getRightElevatorMotor().setPower(power);
-        }
-    }
-
-    @Override
-    public boolean isSafeToMove() {
-        //Check if the current position of both motors are under the max and min from GOBILDA_5203
-        return robotHardware.getLeftElevatorMotor().getCurrentPosition() < Constants.GOBILDA_5203_MAX_HEIGHT_TICKS &&
-                robotHardware.getLeftElevatorMotor().getCurrentPosition() > Constants.GOBILDA_5203_MIN_HEIGHT_TICKS &&
-                robotHardware.getRightElevatorMotor().getCurrentPosition() < Constants.GOBILDA_5203_MAX_HEIGHT_TICKS &&
-                robotHardware.getRightElevatorMotor().getCurrentPosition() > Constants.GOBILDA_5203_MIN_HEIGHT_TICKS;
-    }
-
-    @Override
-    public void home() {
-
-    }
-
-    @Override
-    public void advance() {
-        if (isBusy()) {
-            robotHardware.getLeftElevatorMotor().setPower(0.5);
-            robotHardware.getRightElevatorMotor().setPower(0.5);
-        } else {
-            if (elevatorState) {
-                elevatorState = false;
-                robotHardware.getLeftElevatorMotor().setPower(0);
-                robotHardware.getRightElevatorMotor().setPower(0);
-                robotHardware.getRightElevatorMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robotHardware.getLeftElevatorMotor().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            }
-        }
-    }
-
-    @Override
-    public boolean isBusy() {
-        return robotHardware.getLeftElevatorMotor().isBusy() || robotHardware.getRightElevatorMotor().isBusy();
-    }
 
     @Override
     public void drive(double axial, double lateral, double yaw) {
