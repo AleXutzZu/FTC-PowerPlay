@@ -1,16 +1,16 @@
 package org.firstinspires.ftc.teamcode.control.limbs;
 
 import com.arcrobotics.ftclib.controller.PIDController;
-import org.firstinspires.ftc.teamcode.control.ElevatorControl;
+import org.firstinspires.ftc.teamcode.control.Elevator;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.util.Constants;
 
-public class Elevator implements ElevatorControl {
+public class ElevatorController implements Elevator {
     private final RobotHardware robotHardware;
     private int position = 0;
     private final PIDController pidController;
 
-    public Elevator(RobotHardware robotHardware) {
+    public ElevatorController(RobotHardware robotHardware) {
         this.robotHardware = robotHardware;
         //TODO: Find these values
         pidController = new PIDController(0, 0, 0);

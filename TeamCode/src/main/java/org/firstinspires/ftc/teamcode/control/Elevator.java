@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.control;
 
 import lombok.Getter;
 
-public interface ElevatorControl {
+public interface Elevator {
 
     enum ElevatorLevel {
         /**

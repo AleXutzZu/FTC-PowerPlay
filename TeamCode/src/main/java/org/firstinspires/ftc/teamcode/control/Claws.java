@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.control;
 /**
  * Every claw's implementor is provided with this method.
  */
-public interface ClawsControl {
+public interface Claws {
     /**
      * Invokes the claws to close or open
      *

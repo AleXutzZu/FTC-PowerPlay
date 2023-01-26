@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.control.limbs;
 
 import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.teamcode.control.ClawsControl;
+import org.firstinspires.ftc.teamcode.control.Claws;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
-public class Claws implements ClawsControl {
+public class ClawsController implements Claws {
     private final RobotHardware robotHardware;
     private boolean clawState = false;
-    public Claws(RobotHardware robotHardware) {
+    public ClawsController(RobotHardware robotHardware) {
         this.robotHardware = robotHardware;
     }
 

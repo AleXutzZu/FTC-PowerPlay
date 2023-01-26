@@ -4,14 +4,10 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import lombok.Getter;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.control.limbs.Claws;
-import org.firstinspires.ftc.teamcode.control.limbs.Elevator;
+import org.firstinspires.ftc.teamcode.control.limbs.ClawsController;
+import org.firstinspires.ftc.teamcode.control.limbs.ElevatorController;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
-import org.firstinspires.ftc.teamcode.util.Constants;
 
 /**
  * This class provides enhanced functionality for TeleOp.
@@ -64,8 +60,8 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
      */
     protected final RobotHardware robotHardware = new RobotHardware(this);
 
-    protected final Elevator elevator = new Elevator(robotHardware);
-    protected final Claws claws = new Claws(robotHardware);
+    protected final ElevatorController elevatorController = new ElevatorController(robotHardware);
+    protected final ClawsController clawsController = new ClawsController(robotHardware);
 
     @Override
     public final void runOpMode() throws InterruptedException {
