@@ -17,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
  * <pre>Right front motor:                                  <i>"right_front"</i></pre>
  * <pre>Right back motor:                                   <i>"right_back"</i></pre>
  * <pre>Left front motor:                                   <i>"left_front"</i></pre>
- * <pre>Left back motor:                                    <i>"right_back"</i></pre>
+ * <pre>Left back motor:                                    <i>"left_back"</i></pre>
  * <h3>Motor for using the elevator</h3>
  * <pre>Left elevator motor:                             <i>"left_elevator"</i></pre>
  * <pre>Right elevator motor:                           <i>"right_elevator"</i></pre>
