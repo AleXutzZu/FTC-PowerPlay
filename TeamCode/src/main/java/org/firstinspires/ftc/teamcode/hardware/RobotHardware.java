@@ -91,6 +91,8 @@ public class RobotHardware {
 
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFrontMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightBackMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftElevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         rightElevatorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -167,8 +169,8 @@ public class RobotHardware {
     public void initAutonomous() {
         initDrivetrainMotors();
         initClaws();
-        initIMU();
-        initSensors();
+//        initIMU();
+//        initSensors();
         initWebcam();
     }
 
