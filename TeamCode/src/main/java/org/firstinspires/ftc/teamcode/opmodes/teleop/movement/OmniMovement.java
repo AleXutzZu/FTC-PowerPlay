@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.util.Constants;
 
 @TeleOp(name = "Omni Movement", group = "Movement")
 public class OmniMovement extends TeleOpControl {
-    private static final int ELEVATOR_SCALE = 1;
+    private static final double ELEVATOR_SCALE = 0.25;
 
     @Override
     protected void run() {
