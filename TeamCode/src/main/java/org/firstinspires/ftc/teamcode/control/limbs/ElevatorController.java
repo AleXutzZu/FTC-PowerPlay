@@ -21,7 +21,7 @@ public class ElevatorController implements Elevator {
     public ElevatorController(RobotHardware robotHardware, int tolerance) {
         this.robotHardware = robotHardware;
         //TODO: Find these values
-        pidController = new PIDController(0, 0, 0);
+        pidController = new PIDController(1, 0, 0);
         pidController.setTolerance(tolerance);
 
         PIDFCoefficients coefficients = new PIDFCoefficients(pidController.getP(), pidController.getI(), pidController.getD(), pidController.getF());

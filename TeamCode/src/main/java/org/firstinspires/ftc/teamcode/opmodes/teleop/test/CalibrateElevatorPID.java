@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.util.Constants;
 @TeleOp(name = "Calibrate Elevator PID", group = "Debugging")
 public class CalibrateElevatorPID extends LinearOpMode {
 
-    public static double kP = 0, kI = 0, kD = 0;
-    public static double position = 40;
+    public static double kP = 1, kI = 0, kD = 0;
+    public static double position = 20;
     private final RobotHardware robotHardware = new RobotHardware(this);
 
     @Override
@@ -31,7 +31,7 @@ public class CalibrateElevatorPID extends LinearOpMode {
 
         robotHardware.getElevatorController().setTarget((int) (position * Constants.GOBILDA_5203_TICKS_PER_CM));
         while (opModeIsActive()) {
-
+            robotHardware.getElevatorController().setTarget((int) (position * Constants.GOBILDA_5203_TICKS_PER_CM));
             telemetry.addData("targetPosition", position);
             telemetry.addData("actualPosition", robotHardware.getElevatorController().getCurrentPosition());
 
@@ -43,6 +43,7 @@ public class CalibrateElevatorPID extends LinearOpMode {
             robotHardware.getLeftElevatorMotor().setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, coefficients);
 
             robotHardware.getElevatorController().update();
+            telemetry.update();
         }
     }
 }
