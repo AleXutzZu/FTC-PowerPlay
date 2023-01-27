@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 public class ClawsController implements Claws {
     private final RobotHardware robotHardware;
     private boolean clawState = false;
+
     public ClawsController(RobotHardware robotHardware) {
         this.robotHardware = robotHardware;
     }
@@ -23,6 +24,24 @@ public class ClawsController implements Claws {
             clawState = true;
         }
 
+        return clawState;
+    }
+
+    @Override
+    public void useClaws(boolean state) {
+        if (state) {
+            robotHardware.getLeftClawServo().setPosition(Servo.MAX_POSITION);
+            robotHardware.getRightClawServo().setPosition(Servo.MAX_POSITION);
+            clawState = true;
+        } else {
+            robotHardware.getRightClawServo().setPosition(Servo.MIN_POSITION);
+            robotHardware.getLeftClawServo().setPosition(Servo.MIN_POSITION);
+            clawState = false;
+        }
+    }
+
+    @Override
+    public boolean isClaws() {
         return clawState;
     }
 }

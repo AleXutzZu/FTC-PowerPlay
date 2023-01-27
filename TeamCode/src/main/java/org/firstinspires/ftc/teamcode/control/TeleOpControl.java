@@ -63,7 +63,7 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
         robotHardware.initTeleOp();
         mainGamepad = new GamepadEx(gamepad1);
         secondaryGamepad = new GamepadEx(gamepad2);
-//        claws.useClaws();
+        robotHardware.getClawsController().useClaws(false);
         if (invertedGamepads) {
             GamepadEx aux = secondaryGamepad;
             secondaryGamepad = mainGamepad;
