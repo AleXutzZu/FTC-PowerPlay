@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
  * {@link TeleOpControl#debugMainGamepad()} and {@link  TeleOpControl#debugSecondaryGamepad()}. Only after the execution of
  * these 3 methods is the telemetry updated.
  */
+
 public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
     /**
      * Main gamepad or the "driver gamepad". Assigned by default to gamepad1 of the LinearOpMode.
@@ -186,6 +187,11 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
             targetRightBackPower /= max;
         }
 
+        targetRightBackPower*= POWER_SCALE;
+        targetRightFrontPower*= POWER_SCALE;
+        targetLeftFrontPower*= POWER_SCALE;
+        targetLeftBackPower*= POWER_SCALE;
+
         robotHardware.getLeftFrontMotor().setPower(targetLeftFrontPower);
         robotHardware.getRightFrontMotor().setPower(targetRightFrontPower);
         robotHardware.getLeftBackMotor().setPower(targetLeftBackPower);
@@ -199,4 +205,6 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
         robotHardware.getLeftBackMotor().setPower(leftBack);
         robotHardware.getRightBackMotor().setPower(rightBack);
     }
+
+    private final double POWER_SCALE = 0.8;
 }

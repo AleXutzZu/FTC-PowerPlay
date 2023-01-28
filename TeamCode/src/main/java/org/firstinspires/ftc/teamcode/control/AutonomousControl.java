@@ -53,25 +53,35 @@ public abstract class AutonomousControl extends LinearOpMode {
             if (tfod != null) {
                 List<Recognition> recognitions = tfod.getRecognitions();
 
-                for (Recognition recognition : recognitions) {
-                    sleeveRecognition = recognition;
+                if (!recognitions.isEmpty()) {
+                    //sort recognitions by confidence rate
+                    recognitions.sort((lhs, rhs) -> Float.compare(lhs.getConfidence(), rhs.getConfidence()));
+                    sleeveRecognition = recognitions.get(recognitions.size() - 1);
+                    telemetry.addData("List", recognitions);
+                } else {
+                    sleeveRecognition = null;
                 }
-
             }
+            if (sleeveRecognition == null) {
+                telemetry.addData("Recognition", "NONE");
+            } else {
+                telemetry.addData("Recognition", "%s conf. %.2f", sleeveRecognition.getLabel(), sleeveRecognition.getConfidence());
+            }
+            telemetry.update();
         }
 
         if (sleeveRecognition == null) {
-            parkingSpot = ParkingSpot.TWO;
+            parkingSpot = ParkingSpot.THREE;
         } else {
             switch (sleeveRecognition.getLabel()) {
-                case "1 ORANGE":
+                case "1 Bolt":
                     parkingSpot = ParkingSpot.ONE;
                     break;
-                case "3 DONUT":
-                    parkingSpot = ParkingSpot.THREE;
+                case "2 Bulb":
+                    parkingSpot = ParkingSpot.TWO;
                     break;
                 default:
-                    parkingSpot = ParkingSpot.TWO;
+                    parkingSpot = ParkingSpot.THREE;
                     break;
             }
         }
@@ -109,15 +119,12 @@ public abstract class AutonomousControl extends LinearOpMode {
         // Use loadModelFromAsset() if the TF Model is built in as an asset by Android Studio
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
 //        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
-        tfod.loadModelFromFile(Constants.TFOD_MODEL_FILE, Constants.LABELS);
+        tfod.loadModelFromAsset(Constants.TFOD_MODEL_ASSET, Constants.DEFAULT_LABELS);
     }
 
     private final double TICKS_CENTIMETER = 537.6 / (9.6 * Math.PI);
 
     protected void driveStraight(double distance) {
-        telemetry.addData("Function", "driveStraight");
-        telemetry.addData("Dist", distance);
-        telemetry.update();
         int target = (int) (distance * TICKS_CENTIMETER);
 
         robotHardware.getLeftFrontMotor().setTargetPosition(target);

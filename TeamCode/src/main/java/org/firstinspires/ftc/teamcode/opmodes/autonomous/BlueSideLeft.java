@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.control.AutonomousControl;
 public class BlueSideLeft extends AutonomousControl {
 
     private final double slightBackwards = 10;
-    private final double goLeft = -65;
-    private final double goRight = 65;
+    private final double goLeft = -70;
+    private final double goRight = 70;
     private final double goForward = 75;
 
     @Override
