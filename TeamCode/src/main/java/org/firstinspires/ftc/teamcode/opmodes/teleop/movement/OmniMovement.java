@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.util.Constants;
 
 @TeleOp(name = "Omni Movement", group = "Movement")
 public class OmniMovement extends TeleOpControl {
-    private final int ELEVATOR_SCALE = 5;
+    private static final double ELEVATOR_SCALE = 0.25;
 
     @Override
     protected void run() {
@@ -20,7 +20,7 @@ public class OmniMovement extends TeleOpControl {
         drive(axial, lateral, yaw);
 
         if (secondaryGamepad.wasJustReleased(GamepadKeys.Button.A)) {
-            robotHardware.getClawsController();
+            robotHardware.getClawsController().useClaws();
         }
 
         if (secondaryGamepad.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
@@ -40,5 +40,6 @@ public class OmniMovement extends TeleOpControl {
         elevatorTarget = Range.clip(elevatorTarget, Constants.GOBILDA_5203_MIN_HEIGHT_TICKS, Constants.GOBILDA_5203_MAX_HEIGHT_TICKS) ;
         robotHardware.getElevatorController().setTarget((int) elevatorTarget);
 
+        robotHardware.getElevatorController().update();
     }
 }

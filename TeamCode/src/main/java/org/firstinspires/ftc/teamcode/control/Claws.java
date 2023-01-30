@@ -10,4 +10,16 @@ public interface Claws {
      * @return true if the claws opened or false if the claws closed
      */
     boolean useClaws();
+
+    /**
+     * Closes or opens the claws at the user's discretion
+     * @param state true if the claws should open, false if the claws should close
+     */
+    void useClaws(boolean state);
+
+    /**
+     * Returns the claws state
+     * @return true if the claws are open, false if the claws are close
+     */
+    boolean isClaws();
 }
