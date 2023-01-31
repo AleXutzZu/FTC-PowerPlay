@@ -23,7 +23,12 @@ public interface Elevator {
         /**
          * The highest level of the elevator (slightly above the tallest bar)
          */
-        HIGH(85.9);
+        HIGH(85.9),
+
+        /**
+         * Maximum allowed level the elevator might go to
+         */
+        MAX(90);
 
         @Getter
         private double height = 0;
