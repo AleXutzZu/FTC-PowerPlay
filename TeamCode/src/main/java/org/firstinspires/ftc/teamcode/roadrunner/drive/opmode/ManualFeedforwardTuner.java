@@ -1,12 +1,5 @@
 package org.firstinspires.ftc.teamcode.roadrunner.drive.opmode;
 
-import static org.firstinspires.ftc.teamcode.util.constants.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.util.constants.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.util.constants.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.util.constants.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.util.constants.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.util.constants.DriveConstants.kV;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -20,10 +13,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
-
-import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
 import java.util.Objects;
+
+import static org.firstinspires.ftc.teamcode.util.constants.DriveConstants.*;
 
 /*
  * This routine is designed to tune the open-loop feedforward coefficients. Although it may seem unnecessary,
@@ -46,16 +40,13 @@ import java.util.Objects;
 public class ManualFeedforwardTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
 
-    private FtcDashboard dashboard = FtcDashboard.getInstance();
-
-    private SampleMecanumDrive drive;
+    private final FtcDashboard dashboard = FtcDashboard.getInstance();
+    private final RobotHardware robotHardware = new RobotHardware(this);
 
     enum Mode {
         DRIVER_MODE,
         TUNING_MODE
     }
-
-    private Mode mode;
 
     private static MotionProfile generateProfile(boolean movingForward) {
         MotionState start = new MotionState(movingForward ? 0 : DISTANCE, 0, 0, 0);
@@ -72,9 +63,9 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        drive = new SampleMecanumDrive(hardwareMap);
+        robotHardware.initMecanumDriveController();
 
-        mode = Mode.TUNING_MODE;
+        Mode mode = Mode.TUNING_MODE;
 
         NanoClock clock = NanoClock.system();
 
@@ -113,10 +104,10 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                     MotionState motionState = activeProfile.get(profileTime);
                     double targetPower = Kinematics.calculateMotorFeedforward(motionState.getV(), motionState.getA(), kV, kA, kStatic);
 
-                    drive.setDrivePower(new Pose2d(targetPower, 0, 0));
-                    drive.updatePoseEstimate();
+                    robotHardware.getMecanumDriveController().setDrivePower(new Pose2d(targetPower, 0, 0));
+                    robotHardware.getMecanumDriveController().updatePoseEstimate();
 
-                    Pose2d poseVelo = Objects.requireNonNull(drive.getPoseVelocity(), "poseVelocity() must not be null. Ensure that the getWheelVelocities() method has been overridden in your localizer.");
+                    Pose2d poseVelo = Objects.requireNonNull(robotHardware.getMecanumDriveController().getPoseVelocity(), "poseVelocity() must not be null. Ensure that the getWheelVelocities() method has been overridden in your localizer.");
                     double currentVelo = poseVelo.getX();
 
                     // update telemetry
@@ -132,7 +123,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                         profileStart = clock.seconds();
                     }
 
-                    drive.setWeightedDrivePower(
+                    robotHardware.getMecanumDriveController().setWeightedDrivePower(
                             new Pose2d(
                                     -gamepad1.left_stick_y,
                                     -gamepad1.left_stick_x,

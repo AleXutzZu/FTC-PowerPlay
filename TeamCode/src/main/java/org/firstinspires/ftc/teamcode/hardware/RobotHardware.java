@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import lombok.Getter;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.control.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.control.limbs.ClawsController;
 import org.firstinspires.ftc.teamcode.control.limbs.ElevatorController;
 
@@ -86,7 +87,10 @@ public class RobotHardware {
     @Getter
     private final List<DcMotorEx> drivetrainMotors = new ArrayList<>();
     @Getter
-    private VoltageSensor batteryVoltageSensor;
+    private VoltageSensor batteryVoltageSensor = null;
+
+    @Getter
+    private MecanumDriveController mecanumDriveController = null;
 
     /**
      * Sets bulk caching to AUTO and saves the voltage sensor to the field.
@@ -97,6 +101,12 @@ public class RobotHardware {
         for (LynxModule module : opMode.hardwareMap.getAll(LynxModule.class)) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
+    }
+
+    public void initMecanumDriveController() {
+        initDrivetrainMotors();
+        initIMU();
+        mecanumDriveController = new MecanumDriveController(this);
     }
 
     /**
@@ -148,12 +158,28 @@ public class RobotHardware {
         clawsController = new ClawsController(this);
     }
 
-    private void setAllMode(DcMotor.RunMode mode) {
+    public void setAllMode(DcMotor.RunMode mode) {
         drivetrainMotors.forEach(dcMotorEx -> dcMotorEx.setMode(mode));
     }
 
-    private void setAllBrake() {
+    public void setAllBrake() {
         drivetrainMotors.forEach(dcMotorEx -> dcMotorEx.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
+    }
+
+    public void setAllPowers(double v, double v1, double v2, double v3) {
+        leftFrontMotor.setPower(v);
+        leftBackMotor.setPower(v1);
+        rightBackMotor.setPower(v2);
+        rightFrontMotor.setPower(v3);
+    }
+
+    public void setPIDFCoefficients(DcMotor.RunMode runMode, PIDFCoefficients coefficients) {
+        PIDFCoefficients compensatedCoefficients = new PIDFCoefficients(
+                coefficients.p, coefficients.i, coefficients.d,
+                coefficients.f * 12 / batteryVoltageSensor.getVoltage()
+        );
+
+        drivetrainMotors.forEach(dcMotorEx -> dcMotorEx.setPIDFCoefficients(runMode, compensatedCoefficients));
     }
 
     /**
@@ -190,18 +216,15 @@ public class RobotHardware {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
-
-        //TODO Remap axis if the orientation of the hub using the IMU is not placed with the +Z upwards
     }
 
     /**
      * Initialize all required hardware for the Autonomous Period
      */
     public void initAutonomous() {
-        initDrivetrainMotors();
+        initMecanumDriveController();
         initClaws();
-//        initIMU();
-//        initSensors();
+        initSensors();
         initWebcam();
     }
 

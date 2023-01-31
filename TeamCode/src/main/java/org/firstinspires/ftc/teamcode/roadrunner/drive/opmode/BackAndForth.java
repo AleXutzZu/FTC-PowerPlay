@@ -6,8 +6,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
 /*
  * Op mode for preliminary tuning of the follower PID coefficients (located in the drive base
@@ -29,26 +28,26 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 @Autonomous(group = "drive")
 @Disabled
 public class BackAndForth extends LinearOpMode {
-
+    private final RobotHardware robotHardware = new RobotHardware(this);
     public static double DISTANCE = 50;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        robotHardware.initMecanumDriveController();
 
-        Trajectory trajectoryForward = drive.trajectoryBuilder(new Pose2d())
+        Trajectory trajectoryForward = robotHardware.getMecanumDriveController().trajectoryBuilder(new Pose2d())
                 .forward(DISTANCE)
                 .build();
 
-        Trajectory trajectoryBackward = drive.trajectoryBuilder(trajectoryForward.end())
+        Trajectory trajectoryBackward = robotHardware.getMecanumDriveController().trajectoryBuilder(trajectoryForward.end())
                 .back(DISTANCE)
                 .build();
 
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-            drive.followTrajectory(trajectoryForward);
-            drive.followTrajectory(trajectoryBackward);
+            robotHardware.getMecanumDriveController().followTrajectory(trajectoryForward);
+            robotHardware.getMecanumDriveController().followTrajectory(trajectoryBackward);
         }
     }
 }

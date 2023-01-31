@@ -10,9 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 
 import java.util.Objects;
 
@@ -30,18 +29,18 @@ import java.util.Objects;
 public class MaxVelocityTuner extends LinearOpMode {
     public static double RUNTIME = 2.0;
 
-    private ElapsedTime timer;
     private double maxVelocity = 0.0;
 
-    private VoltageSensor batteryVoltageSensor;
+    private final RobotHardware robotHardware = new RobotHardware(this);
 
     @Override
     public void runOpMode() throws InterruptedException {
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robotHardware.initMecanumDriveController();
 
-        batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
+        robotHardware.getMecanumDriveController().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        VoltageSensor batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -56,18 +55,18 @@ public class MaxVelocityTuner extends LinearOpMode {
         telemetry.clearAll();
         telemetry.update();
 
-        drive.setDrivePower(new Pose2d(1, 0, 0));
-        timer = new ElapsedTime();
+        robotHardware.getMecanumDriveController().setDrivePower(new Pose2d(1, 0, 0));
+        ElapsedTime timer = new ElapsedTime();
 
         while (!isStopRequested() && timer.seconds() < RUNTIME) {
-            drive.updatePoseEstimate();
+            robotHardware.getMecanumDriveController().updatePoseEstimate();
 
-            Pose2d poseVelo = Objects.requireNonNull(drive.getPoseVelocity(), "poseVelocity() must not be null. Ensure that the getWheelVelocities() method has been overridden in your localizer.");
+            Pose2d poseVelo = Objects.requireNonNull(robotHardware.getMecanumDriveController().getPoseVelocity(), "poseVelocity() must not be null. Ensure that the getWheelVelocities() method has been overridden in your localizer.");
 
             maxVelocity = Math.max(poseVelo.vec().norm(), maxVelocity);
         }
 
-        drive.setDrivePower(new Pose2d());
+        robotHardware.getMecanumDriveController().setDrivePower(new Pose2d());
 
         double effectiveKf = DriveConstants.getMotorVelocityF(veloInchesToTicks(maxVelocity));
 
