@@ -1,13 +1,18 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import lombok.Getter;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.control.limbs.ClawsController;
 import org.firstinspires.ftc.teamcode.control.limbs.ElevatorController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <h1>This class can be used to define all the specific hardware for the Perpetuum Mobile Robot.</h1>
@@ -78,6 +83,22 @@ public class RobotHardware {
     @Getter
     private ClawsController clawsController = null;
 
+    @Getter
+    private final List<DcMotorEx> drivetrainMotors = new ArrayList<>();
+    @Getter
+    private VoltageSensor batteryVoltageSensor;
+
+    /**
+     * Sets bulk caching to AUTO and saves the voltage sensor to the field.
+     */
+    public void initLynxModule() {
+        batteryVoltageSensor = opMode.hardwareMap.voltageSensor.iterator().next();
+
+        for (LynxModule module : opMode.hardwareMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
+    }
+
     /**
      * This is the function that we initialize the Motors with
      **/
@@ -89,6 +110,18 @@ public class RobotHardware {
         leftElevatorMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_elevator");
         rightElevatorMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_elevator");
 
+        drivetrainMotors.add(leftFrontMotor);
+        drivetrainMotors.add(leftBackMotor);
+        drivetrainMotors.add(rightBackMotor);
+        drivetrainMotors.add(rightFrontMotor);
+
+        for (DcMotorEx motor : drivetrainMotors) {
+            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
+            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
+            motor.setMotorType(motorConfigurationType);
+        }
+
+
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -97,32 +130,30 @@ public class RobotHardware {
         leftElevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         rightElevatorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setAllMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftElevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightElevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        setAllMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftElevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightElevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        leftElevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightElevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        setAllBrake();
         leftElevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightElevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         elevatorController = new ElevatorController(this);
         clawsController = new ClawsController(this);
+    }
+
+    private void setAllMode(DcMotor.RunMode mode) {
+        drivetrainMotors.forEach(dcMotorEx -> dcMotorEx.setMode(mode));
+    }
+
+    private void setAllBrake() {
+        drivetrainMotors.forEach(dcMotorEx -> dcMotorEx.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
     }
 
     /**
