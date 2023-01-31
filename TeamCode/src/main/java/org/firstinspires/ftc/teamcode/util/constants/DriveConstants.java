@@ -34,30 +34,11 @@ public class DriveConstants {
      * from DriveVelocityPIDTuner.
      */
     public static final boolean RUN_USING_ENCODER = false;
-    /**
-     * Winch pulley diameter in centimeters.
-     */
     public static final double WINCH_PULLEY_CIRCUMFERENCE = 11.2;
-    /**
-     * GOBILDA 5203 Series Yellow Jacket Planetary Gear Motor PPR
-     */
     public static final double ELEVATOR_TICKS_PER_REV = 384.5;
-    /**
-     * Maximum velocity of the motor in theoretical conditions, expressed as ticks/second.
-     */
-    public static final double ELEVATOR_MAX_TICKS_PER_SECOND = 435 * ELEVATOR_TICKS_PER_REV / 60;
-    /**
-     * GOBILDA 5203 Series Yellow Jacket Planetary Gear Motor Ticks/cm
-     */
-    public static final double GOBILDA_5203_TICKS_PER_CM = ELEVATOR_TICKS_PER_REV / WINCH_PULLEY_CIRCUMFERENCE;
-    /**
-     * The maximum height that the elevator shall reach by setting power manually.
-     */
-    public static final int GOBILDA_5203_MAX_HEIGHT_TICKS = (int) (GOBILDA_5203_TICKS_PER_CM * 90);
-    /**
-     * The minimum height that the elevator shall reach by setting power manually.
-     */
-    public static final int GOBILDA_5203_MIN_HEIGHT_TICKS = 0;
+
+    public static final double ELEVATOR_MAX_RPM = 435;
+    public static final double ELEVATOR_MAX_TICKS_PER_SECOND = ELEVATOR_MAX_RPM * ELEVATOR_TICKS_PER_REV / 60;
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
             0);
 
@@ -119,8 +100,12 @@ public class DriveConstants {
     public static double MAX_ANG_ACCEL = Math.toRadians(250.58748);
 
 
-    public static double encoderTicksToInches(double ticks) {
+    public static double drivetrainTicksPerInches(double ticks) {
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / DRIVETRAIN_TICKS_PER_REV;
+    }
+
+    public static double elevatorTicksPerCm(double ticks) {
+        return WINCH_PULLEY_CIRCUMFERENCE * ticks / ELEVATOR_TICKS_PER_REV;
     }
 
     public static double rpmToVelocity(double rpm) {

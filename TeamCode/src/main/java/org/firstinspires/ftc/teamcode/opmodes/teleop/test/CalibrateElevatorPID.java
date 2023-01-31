@@ -32,15 +32,15 @@ public class CalibrateElevatorPID extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        int targetPosition = (int) (start * DriveConstants.GOBILDA_5203_TICKS_PER_CM);
+        int targetPosition = (int) DriveConstants.elevatorTicksPerCm(start);
         while (opModeIsActive()) {
 
             if (runtime.milliseconds() > 5000) {
                 if (targetState) {
-                    targetPosition = (int) (start * DriveConstants.GOBILDA_5203_TICKS_PER_CM);
+                    targetPosition = (int) DriveConstants.elevatorTicksPerCm(start);
                     targetState = false;
                 } else {
-                    targetPosition = (int) ((offset + start) * DriveConstants.GOBILDA_5203_TICKS_PER_CM);
+                    targetPosition = (int) DriveConstants.elevatorTicksPerCm(start + offset);
                     targetState = true;
                 }
                 runtime.reset();

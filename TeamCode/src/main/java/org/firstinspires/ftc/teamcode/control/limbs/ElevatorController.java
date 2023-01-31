@@ -50,7 +50,7 @@ public class ElevatorController implements Elevator {
 
     @Override
     public void setTarget(ElevatorLevel level) {
-        this.target = (int) (level.getHeight() * DriveConstants.GOBILDA_5203_TICKS_PER_CM);
+        this.target = (int) DriveConstants.elevatorTicksPerCm(level.getHeight());
     }
 
     @Override
