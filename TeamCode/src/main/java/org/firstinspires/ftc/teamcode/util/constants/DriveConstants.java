@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.util.constants;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 /*
@@ -98,6 +99,12 @@ public class DriveConstants {
     public static double MAX_ACCEL = 52.09776244331133;
     public static double MAX_ANG_VEL = Math.toRadians(250.58748);
     public static double MAX_ANG_ACCEL = Math.toRadians(250.58748);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
+    public static double LATERAL_MULTIPLIER = 1;
+    public static double VX_WEIGHT = 1;
+    public static double VY_WEIGHT = 1;
+    public static double OMEGA_WEIGHT = 1;
 
 
     public static double drivetrainTicksPerInches(double ticks) {
