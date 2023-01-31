@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.control.Elevator;
 import org.firstinspires.ftc.teamcode.control.TeleOpControl;
-import org.firstinspires.ftc.teamcode.util.Constants;
+import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
 
 @TeleOp(name = "Omni Movement", group = "Movement")
 public class OmniMovement extends TeleOpControl {
@@ -36,8 +36,8 @@ public class OmniMovement extends TeleOpControl {
             robotHardware.getElevatorController().setTarget(Elevator.ElevatorLevel.LOW);
         }
 
-        double elevatorTarget = robotHardware.getElevatorController().getTarget() + (secondaryGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) - secondaryGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)) * Constants.GOBILDA_5203_TICKS_PER_CM * ELEVATOR_SCALE;
-        elevatorTarget = Range.clip(elevatorTarget, Constants.GOBILDA_5203_MIN_HEIGHT_TICKS, Constants.GOBILDA_5203_MAX_HEIGHT_TICKS) ;
+        double elevatorTarget = robotHardware.getElevatorController().getTarget() + (secondaryGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) - secondaryGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)) * DriveConstants.GOBILDA_5203_TICKS_PER_CM * ELEVATOR_SCALE;
+        elevatorTarget = Range.clip(elevatorTarget, DriveConstants.GOBILDA_5203_MIN_HEIGHT_TICKS, DriveConstants.GOBILDA_5203_MAX_HEIGHT_TICKS) ;
         robotHardware.getElevatorController().setTarget((int) elevatorTarget);
 
         robotHardware.getElevatorController().update();

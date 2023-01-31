@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.roadrunner.drive;
+package org.firstinspires.ftc.teamcode.util.constants;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
@@ -22,8 +22,8 @@ public class DriveConstants {
     /*
      * These are motor constants that should be listed online for your motors.
      */
-    public static final double TICKS_PER_REV = 537.6;
-    public static final double MAX_RPM = 312;
+    public static final double DRIVETRAIN_TICKS_PER_REV = 537.6;
+    public static final double DRIVETRAIN_MAX_RPM = 312;
 
     /*
      * Set RUN_USING_ENCODER to true to enable built-in hub velocity control using drive encoders.
@@ -33,9 +33,33 @@ public class DriveConstants {
      * If using the built-in motor velocity PID, update MOTOR_VELO_PID with the tuned coefficients
      * from DriveVelocityPIDTuner.
      */
-    public static final boolean RUN_USING_ENCODER = true;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(27.6, 0, 3.8,
-            12.873572526479869);
+    public static final boolean RUN_USING_ENCODER = false;
+    /**
+     * Winch pulley diameter in centimeters.
+     */
+    public static final double WINCH_PULLEY_CIRCUMFERENCE = 11.2;
+    /**
+     * GOBILDA 5203 Series Yellow Jacket Planetary Gear Motor PPR
+     */
+    public static final double ELEVATOR_TICKS_PER_REV = 384.5;
+    /**
+     * Maximum velocity of the motor in theoretical conditions, expressed as ticks/second.
+     */
+    public static final double ELEVATOR_MAX_TICKS_PER_SECOND = 435 * ELEVATOR_TICKS_PER_REV / 60;
+    /**
+     * GOBILDA 5203 Series Yellow Jacket Planetary Gear Motor Ticks/cm
+     */
+    public static final double GOBILDA_5203_TICKS_PER_CM = ELEVATOR_TICKS_PER_REV / WINCH_PULLEY_CIRCUMFERENCE;
+    /**
+     * The maximum height that the elevator shall reach by setting power manually.
+     */
+    public static final int GOBILDA_5203_MAX_HEIGHT_TICKS = (int) (GOBILDA_5203_TICKS_PER_CM * 90);
+    /**
+     * The minimum height that the elevator shall reach by setting power manually.
+     */
+    public static final int GOBILDA_5203_MIN_HEIGHT_TICKS = 0;
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
+            0);
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -47,7 +71,9 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 1.8898; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 13.87; // in
+    public static double TRACK_WIDTH = 0; // in
+
+    public static double WHEEL_BASE = 0; // in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -55,7 +81,7 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 1.0 / rpmToVelocity(MAX_RPM);
+    public static double kV = 1.0 / rpmToVelocity(DRIVETRAIN_MAX_RPM);
     public static double kA = 0;
     public static double kStatic = 0;
 
@@ -94,7 +120,7 @@ public class DriveConstants {
 
 
     public static double encoderTicksToInches(double ticks) {
-        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
+        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / DRIVETRAIN_TICKS_PER_REV;
     }
 
     public static double rpmToVelocity(double rpm) {

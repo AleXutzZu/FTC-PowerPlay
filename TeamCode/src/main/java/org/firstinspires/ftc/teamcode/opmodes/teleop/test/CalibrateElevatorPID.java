@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
-import org.firstinspires.ftc.teamcode.util.Constants;
+import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
 
 @Config
 @TeleOp(name = "Calibrate Elevator PID", group = "Debugging")
@@ -32,15 +32,15 @@ public class CalibrateElevatorPID extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        int targetPosition = (int) (start * Constants.GOBILDA_5203_TICKS_PER_CM);
+        int targetPosition = (int) (start * DriveConstants.GOBILDA_5203_TICKS_PER_CM);
         while (opModeIsActive()) {
 
             if (runtime.milliseconds() > 5000) {
                 if (targetState) {
-                    targetPosition = (int) (start * Constants.GOBILDA_5203_TICKS_PER_CM);
+                    targetPosition = (int) (start * DriveConstants.GOBILDA_5203_TICKS_PER_CM);
                     targetState = false;
                 } else {
-                    targetPosition = (int) ((offset + start) * Constants.GOBILDA_5203_TICKS_PER_CM);
+                    targetPosition = (int) ((offset + start) * DriveConstants.GOBILDA_5203_TICKS_PER_CM);
                     targetState = true;
                 }
                 runtime.reset();

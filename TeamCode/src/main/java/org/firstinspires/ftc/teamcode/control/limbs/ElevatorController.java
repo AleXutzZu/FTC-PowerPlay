@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.control.limbs;
 
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.controller.wpilibcontroller.ElevatorFeedforward;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import lombok.Getter;
 import org.firstinspires.ftc.teamcode.control.Elevator;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
-import org.firstinspires.ftc.teamcode.util.Constants;
+import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
 
 public class ElevatorController implements Elevator {
     private final RobotHardware robotHardware;
@@ -38,7 +37,7 @@ public class ElevatorController implements Elevator {
     @Override
     public void update() {
         //transform velocity to ratio
-        double calculatedPower = pidController.calculate(robotHardware.getLeftElevatorMotor().getCurrentPosition(), target) / Constants.GOBILDA_5203_MAX_TICKS_PER_SECOND;
+        double calculatedPower = pidController.calculate(robotHardware.getLeftElevatorMotor().getCurrentPosition(), target) / DriveConstants.ELEVATOR_MAX_TICKS_PER_SECOND;
 
         robotHardware.getRightElevatorMotor().setPower(calculatedPower);
         robotHardware.getLeftElevatorMotor().setPower(calculatedPower);
@@ -51,7 +50,7 @@ public class ElevatorController implements Elevator {
 
     @Override
     public void setTarget(ElevatorLevel level) {
-        this.target = (int) (level.getHeight() * Constants.GOBILDA_5203_TICKS_PER_CM);
+        this.target = (int) (level.getHeight() * DriveConstants.GOBILDA_5203_TICKS_PER_CM);
     }
 
     @Override

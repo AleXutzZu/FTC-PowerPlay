@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.util.Constants;
+import org.firstinspires.ftc.teamcode.util.constants.VisionConstants;
 
 import java.util.List;
 
@@ -100,7 +100,7 @@ public abstract class AutonomousControl extends LinearOpMode {
          */
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
-        parameters.vuforiaLicenseKey = Constants.VUFORIA_KEY;
+        parameters.vuforiaLicenseKey = VisionConstants.VUFORIA_KEY;
         parameters.cameraName = robotHardware.getWebcam();
 
         //  Instantiate the Vuforia engine
@@ -119,7 +119,7 @@ public abstract class AutonomousControl extends LinearOpMode {
         // Use loadModelFromAsset() if the TF Model is built in as an asset by Android Studio
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
 //        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
-        tfod.loadModelFromAsset(Constants.TFOD_MODEL_ASSET, Constants.DEFAULT_LABELS);
+        tfod.loadModelFromAsset(VisionConstants.TFOD_MODEL_ASSET, VisionConstants.DEFAULT_LABELS);
     }
 
     private final double TICKS_CENTIMETER = 537.6 / (9.6 * Math.PI);
