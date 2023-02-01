@@ -22,11 +22,6 @@ public class ElevatorController implements Elevator {
         this.robotHardware = robotHardware;
         pidController = new PIDController(2.3, 1.4, 0.09);
         pidController.setTolerance(tolerance);
-
-        PIDFCoefficients coefficients = new PIDFCoefficients(pidController.getP(), pidController.getI(), pidController.getD(), pidController.getF());
-
-        robotHardware.getLeftElevatorMotor().setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, coefficients);
-        robotHardware.getRightElevatorMotor().setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, coefficients);
     }
 
     @Override
@@ -37,10 +32,10 @@ public class ElevatorController implements Elevator {
     @Override
     public void update() {
         //transform velocity to ratio
-        double calculatedPower = pidController.calculate(robotHardware.getLeftElevatorMotor().getCurrentPosition(), target) / DriveConstants.ELEVATOR_MAX_TICKS_PER_SECOND;
+        double calculatedVelocity = pidController.calculate(robotHardware.getLeftElevatorMotor().getCurrentPosition(), target);
 
-        robotHardware.getRightElevatorMotor().setPower(calculatedPower);
-        robotHardware.getLeftElevatorMotor().setPower(calculatedPower);
+        robotHardware.getRightElevatorMotor().setVelocity(calculatedVelocity);
+        robotHardware.getLeftElevatorMotor().setVelocity(calculatedVelocity);
     }
 
     @Override
