@@ -31,8 +31,7 @@ import java.util.List;
  * <pre>Right elevator motor:                           <i>"right_elevator"</i></pre>
  * <br>
  * <h2> Servos </h2>
- * <pre> Left claw servo:                                  <i> "left_claw"</i> </pre>
- * <pre> Right claw servo:                                <i> "right_claw"</i> </pre>
+ * <pre> Claw servo:                                        <i> "claw"</i> </pre>
  * <h2>Sensors and misc</h2>
  * <h3>2M Distance Sensors</h3>
  * <pre>Left side sensor                                    <i>"left_2m"</i></pre>
@@ -66,9 +65,7 @@ public class RobotHardware {
     @Getter
     private DcMotorEx rightElevatorMotor = null;
     @Getter
-    private Servo leftClawServo = null;
-    @Getter
-    private Servo rightClawServo = null;
+    private Servo clawServo = null;
     @Getter
     private Rev2mDistanceSensor right2mSensor = null;
     @Getter
@@ -188,15 +185,11 @@ public class RobotHardware {
 
     public void initClaws() {
 
-        leftClawServo = opMode.hardwareMap.get(Servo.class, "left_claw");
-        rightClawServo = opMode.hardwareMap.get(Servo.class, "right_claw");
+        clawServo = opMode.hardwareMap.get(Servo.class, "claw");
 
-        leftClawServo.setDirection(Servo.Direction.REVERSE);
 
-        //Approx 30 deg - 120 deg
-        leftClawServo.scaleRange(1f / 60f, 1f / 15f);
-        rightClawServo.scaleRange(1f / 60f, 1f / 15f);
-
+        //Approx 36 - 130 deg
+        clawServo.scaleRange(0.02, 0.072);
     }
 
     /**

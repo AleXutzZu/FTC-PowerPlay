@@ -15,12 +15,10 @@ public class ClawsController implements Claws {
     @Override
     public boolean useClaws() {
         if (clawState) {
-            robotHardware.getLeftClawServo().setPosition(Servo.MAX_POSITION);
-            robotHardware.getRightClawServo().setPosition(Servo.MAX_POSITION);
+            robotHardware.getClawServo().setPosition(Servo.MAX_POSITION);
             clawState = false;
         } else {
-            robotHardware.getLeftClawServo().setPosition(Servo.MIN_POSITION);
-            robotHardware.getRightClawServo().setPosition(Servo.MIN_POSITION);
+            robotHardware.getClawServo().setPosition(Servo.MIN_POSITION);
             clawState = true;
         }
 
@@ -30,12 +28,10 @@ public class ClawsController implements Claws {
     @Override
     public void useClaws(boolean state) {
         if (state) {
-            robotHardware.getLeftClawServo().setPosition(Servo.MIN_POSITION);
-            robotHardware.getRightClawServo().setPosition(Servo.MIN_POSITION);
+            robotHardware.getClawServo().setPosition(Servo.MIN_POSITION);
             clawState = true;
         } else {
-            robotHardware.getRightClawServo().setPosition(Servo.MAX_POSITION);
-            robotHardware.getLeftClawServo().setPosition(Servo.MAX_POSITION);
+            robotHardware.getClawServo().setPosition(Servo.MAX_POSITION);
             clawState = false;
         }
     }
