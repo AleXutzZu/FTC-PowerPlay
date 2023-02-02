@@ -36,8 +36,8 @@ public class OmniMovement extends TeleOpControl {
             robotHardware.getElevatorController().setTarget(Elevator.ElevatorLevel.LOW);
         }
 
-        double elevatorTarget = robotHardware.getElevatorController().getTarget() + DriveConstants.elevatorTicksPerCm(secondaryGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) - secondaryGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)) * ELEVATOR_SCALE;
-        elevatorTarget = Range.clip(elevatorTarget, DriveConstants.elevatorTicksPerCm(Elevator.ElevatorLevel.BASE.getHeight()), DriveConstants.elevatorTicksPerCm(Elevator.ElevatorLevel.MAX.getHeight()));
+        double elevatorTarget = robotHardware.getElevatorController().getTarget() + DriveConstants.elevatorCmToTicks(secondaryGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) - secondaryGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)) * ELEVATOR_SCALE;
+        elevatorTarget = Range.clip(elevatorTarget, DriveConstants.elevatorCmToTicks(Elevator.ElevatorLevel.BASE.getHeight()), DriveConstants.elevatorCmToTicks(Elevator.ElevatorLevel.MAX.getHeight()));
         robotHardware.getElevatorController().setTarget((int) elevatorTarget);
 
         robotHardware.getElevatorController().update();

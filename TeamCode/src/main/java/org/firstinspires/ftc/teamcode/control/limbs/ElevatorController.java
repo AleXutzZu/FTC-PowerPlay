@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.control.limbs;
 
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import lombok.Getter;
 import org.firstinspires.ftc.teamcode.control.Elevator;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
@@ -32,10 +30,10 @@ public class ElevatorController implements Elevator {
     @Override
     public void update() {
         //transform velocity to ratio
-        double calculatedVelocity = pidController.calculate(robotHardware.getLeftElevatorMotor().getCurrentPosition(), target);
+        double calculatedPower = pidController.calculate(robotHardware.getLeftElevatorMotor().getCurrentPosition(), target) / DriveConstants.ELEVATOR_MAX_TICKS_PER_SECOND;
 
-        robotHardware.getRightElevatorMotor().setVelocity(calculatedVelocity);
-        robotHardware.getLeftElevatorMotor().setVelocity(calculatedVelocity);
+        robotHardware.getRightElevatorMotor().setPower(calculatedPower);
+        robotHardware.getLeftElevatorMotor().setPower(calculatedPower);
     }
 
     @Override
@@ -45,7 +43,7 @@ public class ElevatorController implements Elevator {
 
     @Override
     public void setTarget(ElevatorLevel level) {
-        this.target = (int) DriveConstants.elevatorTicksPerCm(level.getHeight());
+        this.target = (int) DriveConstants.elevatorCmToTicks(level.getHeight());
     }
 
     @Override
