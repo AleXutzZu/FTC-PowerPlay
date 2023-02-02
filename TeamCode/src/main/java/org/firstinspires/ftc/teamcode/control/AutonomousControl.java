@@ -5,11 +5,20 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import lombok.Getter;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
+import org.firstinspires.ftc.teamcode.util.AprilTagPipeline;
+import org.openftc.apriltag.AprilTagDetection;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+
+import java.util.List;
 
 public abstract class AutonomousControl extends LinearOpMode {
 
     @Getter
     protected final RobotHardware robotHardware = new RobotHardware(this);
+
+    private static final double APRIL_TAG_SIZE = 0.045;
 
     protected enum ParkingSpot {
         ONE, TWO, THREE
@@ -24,8 +33,33 @@ public abstract class AutonomousControl extends LinearOpMode {
         robotHardware.initAutonomous();
         robotHardware.getClawsController().useClaws(false);
 
+        robotHardware.initWebcam();
+
+        OpenCvCamera camera = OpenCvCameraFactory.getInstance().createWebcam(robotHardware.getWebcam());
+
+        AprilTagPipeline pipeline = new AprilTagPipeline(APRIL_TAG_SIZE);
+        camera.setPipeline(pipeline);
+
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+
+        waitForStart();
 
         while (opModeInInit()) {
+            List<AprilTagDetection> detections = pipeline.getLatestDetections();
+
+            for (AprilTagDetection detection : detections) {
+                telemetry.addData("Detection ID", detection.id);
+            }
 
             telemetry.update();
         }
@@ -37,6 +71,7 @@ public abstract class AutonomousControl extends LinearOpMode {
     }
 
     protected abstract void run();
+
     private final double TICKS_CENTIMETER = 537.6 / (9.6 * Math.PI);
 
     protected void driveStraight(double distance) {
