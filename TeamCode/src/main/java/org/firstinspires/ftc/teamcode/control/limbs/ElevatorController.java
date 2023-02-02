@@ -18,7 +18,7 @@ public class ElevatorController implements Elevator {
 
     public ElevatorController(RobotHardware robotHardware, int tolerance) {
         this.robotHardware = robotHardware;
-        pidController = new PIDController(2.3, 1.4, 0.09);
+        pidController = new PIDController(8, 8.5, 1.3);
         pidController.setTolerance(tolerance);
     }
 
