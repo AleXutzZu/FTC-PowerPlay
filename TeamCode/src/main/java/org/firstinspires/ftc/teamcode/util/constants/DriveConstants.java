@@ -40,6 +40,8 @@ public class DriveConstants {
 
     public static final double ELEVATOR_MAX_RPM = 435;
     public static final double ELEVATOR_MAX_TICKS_PER_SECOND = ELEVATOR_MAX_RPM * ELEVATOR_TICKS_PER_REV / 60;
+    public static final double CLAW_OPEN_POSITION = 0.15;
+    public static final int CLAW_CLOSE_POSITION = 1;
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
             0);
 

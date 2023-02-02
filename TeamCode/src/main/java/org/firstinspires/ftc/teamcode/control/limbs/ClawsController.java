@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.control.limbs;
 
-import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.control.Claws;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
+import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
 
 public class ClawsController implements Claws {
     private final RobotHardware robotHardware;
@@ -15,10 +15,10 @@ public class ClawsController implements Claws {
     @Override
     public boolean useClaws() {
         if (clawState) {
-            robotHardware.getClawServo().setPosition(Servo.MAX_POSITION);
+            robotHardware.getClawServo().setPosition(DriveConstants.CLAW_CLOSE_POSITION);
             clawState = false;
         } else {
-            robotHardware.getClawServo().setPosition(0.15);
+            robotHardware.getClawServo().setPosition(DriveConstants.CLAW_OPEN_POSITION);
             clawState = true;
         }
 
@@ -28,10 +28,10 @@ public class ClawsController implements Claws {
     @Override
     public void useClaws(boolean state) {
         if (state) {
-            robotHardware.getClawServo().setPosition(0.15);
+            robotHardware.getClawServo().setPosition(DriveConstants.CLAW_OPEN_POSITION);
             clawState = true;
         } else {
-            robotHardware.getClawServo().setPosition(Servo.MAX_POSITION);
+            robotHardware.getClawServo().setPosition(DriveConstants.CLAW_CLOSE_POSITION);
             clawState = false;
         }
     }
