@@ -58,6 +58,14 @@ public abstract class AutonomousControl extends LinearOpMode {
             List<AprilTagDetection> detections = pipeline.getLatestDetections();
 
             for (AprilTagDetection detection : detections) {
+                if (detection.id == 326) {
+                    parkingSpot = ParkingSpot.ONE;
+                } else if (detection.id == 141) {
+                    parkingSpot = ParkingSpot.TWO;
+                } else if (detection.id == 564) {
+                    parkingSpot = ParkingSpot.THREE;
+                }
+
                 telemetry.addData("Detection ID", detection.id);
             }
 
