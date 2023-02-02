@@ -12,6 +12,11 @@ public class BlueSideLeft extends AutonomousControl {
     private final double goForward = 75;
 
     @Override
+    protected void initTrajectories() {
+
+    }
+
+    @Override
     protected void run() {
         switch (getParkingSpot()) {
             case ONE:
