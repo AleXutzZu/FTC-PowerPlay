@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.control.Elevator;
 import org.firstinspires.ftc.teamcode.control.TeleOpControl;
+import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
 
 @TeleOp(name = "Test Improved Elevator", group = "Debugging")
 public class TestImprovedElevator extends TeleOpControl {
@@ -32,13 +33,9 @@ public class TestImprovedElevator extends TeleOpControl {
             robotHardware.getElevatorController().setTarget(level);
         }
 
-        telemetry.addData("Target left", robotHardware.getLeftElevatorMotor().getTargetPosition());
-        telemetry.addData("Target right", robotHardware.getRightElevatorMotor().getTargetPosition());
-        telemetry.addData("Current left", robotHardware.getLeftElevatorMotor().getCurrentPosition());
-        telemetry.addData("Current right", robotHardware.getLeftElevatorMotor().getCurrentPosition());
-
-        telemetry.addData("0 Mode right", robotHardware.getRightElevatorMotor().getZeroPowerBehavior());
-        telemetry.addData("0 Mode left", robotHardware.getLeftElevatorMotor().getZeroPowerBehavior());
+        telemetry.addData("Calculated target", DriveConstants.elevatorCmToTicks(level.getHeight()));
+        telemetry.addData("Target", robotHardware.getElevatorController().getTarget());
+        telemetry.addData("Current", robotHardware.getElevatorController().getCurrentPosition());
 
         telemetry.addData("Left power", robotHardware.getLeftFrontMotor().getPower());
         telemetry.addData("Right power", robotHardware.getRightFrontMotor().getPower());
