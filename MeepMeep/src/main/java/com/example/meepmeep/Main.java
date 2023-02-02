@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+import sun.text.resources.ext.FormatData_en_IN;
 
 public class Main {
 
@@ -16,11 +17,20 @@ public class Main {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-35, -60.5, Math.toRadians(90)))
                                 .splineToSplineHeading(new Pose2d(-12, -60.5, Math.toRadians(90)), 0)
-                                .splineToSplineHeading(new Pose2d(-12, -12, Math.toRadians(180)), Math.toRadians(90))
-                                .forward(48)
-                                .addSpatialMarker(new Vector2d(-45, -12), () -> {
+                                .splineToSplineHeading(new Pose2d(-12, -12, Math.toRadians(135)), Math.toRadians(90))
+                                .addDisplacementMarker(() -> {
 
                                 })
+                                .forward(7)
+                                .addDisplacementMarker(() -> {
+
+                                })
+                                .lineToLinearHeading(new Pose2d(-12, -12, Math.toRadians(180)))
+                                .forward(48)
+                                .addDisplacementMarker(() -> {
+
+                                })
+                                .lineToLinearHeading(new Pose2d(-12, -12, Math.toRadians(135)))
                                 .build());
 
 
