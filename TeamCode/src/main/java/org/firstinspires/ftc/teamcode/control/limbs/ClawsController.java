@@ -18,7 +18,7 @@ public class ClawsController implements Claws {
             robotHardware.getClawServo().setPosition(Servo.MAX_POSITION);
             clawState = false;
         } else {
-            robotHardware.getClawServo().setPosition(Servo.MIN_POSITION);
+            robotHardware.getClawServo().setPosition(0.15);
             clawState = true;
         }
 
@@ -28,7 +28,7 @@ public class ClawsController implements Claws {
     @Override
     public void useClaws(boolean state) {
         if (state) {
-            robotHardware.getClawServo().setPosition(Servo.MIN_POSITION);
+            robotHardware.getClawServo().setPosition(0.15);
             clawState = true;
         } else {
             robotHardware.getClawServo().setPosition(Servo.MAX_POSITION);
