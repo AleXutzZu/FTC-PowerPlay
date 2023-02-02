@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.control.limbs;
 
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import lombok.Getter;
 import org.firstinspires.ftc.teamcode.control.Elevator;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
@@ -20,13 +18,8 @@ public class ElevatorController implements Elevator {
 
     public ElevatorController(RobotHardware robotHardware, int tolerance) {
         this.robotHardware = robotHardware;
-        pidController = new PIDController(2.3, 1.4, 0.09);
+        pidController = new PIDController(8, 8.5, 1.3);
         pidController.setTolerance(tolerance);
-
-        PIDFCoefficients coefficients = new PIDFCoefficients(pidController.getP(), pidController.getI(), pidController.getD(), pidController.getF());
-
-        robotHardware.getLeftElevatorMotor().setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, coefficients);
-        robotHardware.getRightElevatorMotor().setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, coefficients);
     }
 
     @Override
@@ -50,7 +43,7 @@ public class ElevatorController implements Elevator {
 
     @Override
     public void setTarget(ElevatorLevel level) {
-        this.target = (int) DriveConstants.elevatorTicksPerCm(level.getHeight());
+        this.target = (int) DriveConstants.elevatorCmToTicks(level.getHeight());
     }
 
     @Override

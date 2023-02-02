@@ -40,6 +40,8 @@ public class DriveConstants {
 
     public static final double ELEVATOR_MAX_RPM = 435;
     public static final double ELEVATOR_MAX_TICKS_PER_SECOND = ELEVATOR_MAX_RPM * ELEVATOR_TICKS_PER_REV / 60;
+    public static final double CLAW_OPEN_POSITION = 0.15;
+    public static final int CLAW_CLOSE_POSITION = 1;
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
             0);
 
@@ -53,9 +55,9 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 1.8898; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 0; // in
+    public static double TRACK_WIDTH = 11.5; // in
 
-    public static double WHEEL_BASE = 0; // in
+    public static double WHEEL_BASE = 13.5; // in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -63,9 +65,9 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 1.0 / rpmToVelocity(DRIVETRAIN_MAX_RPM);
-    public static double kA = 0;
-    public static double kStatic = 0;
+    public static double kV = 0.01707;
+    public static double kA = 0.00165;
+    public static double kStatic = 0.06751;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -97,10 +99,10 @@ public class DriveConstants {
      */
     public static double MAX_VEL = 52.09776244331133;
     public static double MAX_ACCEL = 52.09776244331133;
-    public static double MAX_ANG_VEL = Math.toRadians(250.58748);
+    public static double MAX_ANG_VEL = 4.302544843778562;
     public static double MAX_ANG_ACCEL = Math.toRadians(250.58748);
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(6.2, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(6, 0, 0);
     public static double LATERAL_MULTIPLIER = 1;
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
@@ -111,8 +113,8 @@ public class DriveConstants {
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / DRIVETRAIN_TICKS_PER_REV;
     }
 
-    public static double elevatorTicksPerCm(double ticks) {
-        return WINCH_PULLEY_CIRCUMFERENCE * ticks / ELEVATOR_TICKS_PER_REV;
+    public static double elevatorCmToTicks(double cm) {
+        return ELEVATOR_TICKS_PER_REV * cm / WINCH_PULLEY_CIRCUMFERENCE;
     }
 
     public static double rpmToVelocity(double rpm) {

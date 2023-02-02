@@ -206,5 +206,5 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
         robotHardware.getRightBackMotor().setPower(rightBack);
     }
 
-    private final double POWER_SCALE = 0.8;
+    private static final double POWER_SCALE = 1;
 }
