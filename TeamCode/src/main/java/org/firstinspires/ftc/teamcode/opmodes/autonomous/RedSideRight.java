@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.control.AutonomousControl;
 
 @Autonomous (name ="Red Side Right",group = "Demo",preselectTeleOp = "Omni Movement")
-
+@Disabled
 public class RedSideRight extends AutonomousControl {
 
     private final double slightBackwards = 10;
