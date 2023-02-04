@@ -101,8 +101,8 @@ public class DriveConstants {
     public static double MAX_ACCEL = 52.09776244331133;
     public static double MAX_ANG_VEL = 4.302544843778562;
     public static double MAX_ANG_ACCEL = Math.toRadians(250.58748);
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(6.2, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(6, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 1.1);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 1.1);
     public static double LATERAL_MULTIPLIER = 1;
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
