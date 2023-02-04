@@ -54,7 +54,7 @@ public abstract class AutonomousControl extends LinearOpMode {
 
         initTrajectories();
 
-        waitForStart();
+//        waitForStart();
 
         while (opModeInInit()) {
             List<AprilTagDetection> detections = pipeline.getLatestDetections();
