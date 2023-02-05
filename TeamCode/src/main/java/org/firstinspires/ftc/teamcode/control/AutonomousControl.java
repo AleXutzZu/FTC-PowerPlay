@@ -52,6 +52,8 @@ public abstract class AutonomousControl extends LinearOpMode {
             }
         });
 
+        initTrajectories();
+
         waitForStart();
 
         while (opModeInInit()) {
@@ -77,6 +79,8 @@ public abstract class AutonomousControl extends LinearOpMode {
 
         run();
     }
+
+    protected abstract void initTrajectories();
 
     protected abstract void run();
 

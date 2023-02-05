@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.control.AutonomousControl;
-import org.firstinspires.ftc.teamcode.opmodes.teleop.movement.OmniMovement;
 
 @Autonomous (name ="Red Side Right",group = "Demo",preselectTeleOp = "Omni Movement")
 
@@ -12,6 +11,11 @@ public class RedSideRight extends AutonomousControl {
     private final double goLeft = -70;
     private final double goRight = 70;
     private final double goForward = 75;
+
+    @Override
+    protected void initTrajectories() {
+
+    }
 
     @Override
     protected void run() {
