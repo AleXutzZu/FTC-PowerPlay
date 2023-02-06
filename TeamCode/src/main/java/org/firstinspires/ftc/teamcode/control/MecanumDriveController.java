@@ -31,7 +31,7 @@ public class MecanumDriveController extends MecanumDrive {
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(DriveConstants.MAX_ACCEL);
 
     public MecanumDriveController(RobotHardware robotHardware) {
-        super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, DriveConstants.TRACK_WIDTH, DriveConstants.WHEEL_BASE, DriveConstants.LATERAL_MULTIPLIER);
+        super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, DriveConstants.TRACK_WIDTH, DriveConstants.TRACK_WIDTH, DriveConstants.LATERAL_MULTIPLIER);
         this.robotHardware = robotHardware;
 
         TrajectoryFollower follower = new HolonomicPIDVAFollower(DriveConstants.TRANSLATIONAL_PID, DriveConstants.TRANSLATIONAL_PID, DriveConstants.HEADING_PID, new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);

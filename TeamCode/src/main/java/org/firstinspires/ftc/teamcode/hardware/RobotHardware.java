@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.control.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.control.limbs.ClawsController;
 import org.firstinspires.ftc.teamcode.control.limbs.ElevatorController;
+import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,6 +144,12 @@ public class RobotHardware {
         rightElevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         setAllMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if (DriveConstants.RUN_USING_ENCODER) setAllMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        if (DriveConstants.RUN_USING_ENCODER && DriveConstants.MOTOR_VELO_PID != null) {
+            setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, DriveConstants.MOTOR_VELO_PID);
+        }
 
         leftElevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightElevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
