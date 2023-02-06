@@ -20,11 +20,11 @@ public class DemoAutonomous extends AutonomousControl {
 
         leftTrajectory = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(forwardTrajectory.end())
-                .strafeLeft(23.6).build();
+                .strafeLeft(25.6).build();
 
         rightTrajectory = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(forwardTrajectory.end())
-                .strafeRight(23.6).build();
+                .strafeRight(25.6).build();
     }
 
     @Override
