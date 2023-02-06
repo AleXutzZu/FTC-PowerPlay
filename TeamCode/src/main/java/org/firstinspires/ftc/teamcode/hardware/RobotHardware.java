@@ -217,7 +217,7 @@ public class RobotHardware {
     public void initAutonomous() {
         initMecanumDriveController();
         initClaws();
-        initSensors();
+//        initSensors();
         initWebcam();
     }
 
