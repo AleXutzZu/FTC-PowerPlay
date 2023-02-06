@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
@@ -26,7 +25,6 @@ import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
  */
 @Config
 @Autonomous(group = "drive")
-@Disabled
 public class BackAndForth extends LinearOpMode {
     private final RobotHardware robotHardware = new RobotHardware(this);
     public static double DISTANCE = 50;

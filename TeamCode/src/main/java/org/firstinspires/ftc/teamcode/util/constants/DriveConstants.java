@@ -42,8 +42,10 @@ public class DriveConstants {
     public static final double ELEVATOR_MAX_TICKS_PER_SECOND = ELEVATOR_MAX_RPM * ELEVATOR_TICKS_PER_REV / 60;
     public static final double CLAW_OPEN_POSITION = 0.15;
     public static final int CLAW_CLOSE_POSITION = 1;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
-            getMotorVelocityF(DRIVETRAIN_MAX_RPM / 60 * DRIVETRAIN_TICKS_PER_REV));
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(20, 0, 1.6,
+            12.888909298320863);
+
+    //
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -96,10 +98,10 @@ public class DriveConstants {
      * You are free to raise this on your own if you would like. It is best determined through experimentation.
 
      */
-    public static double MAX_VEL = 52.48180821614297;
-    public static double MAX_ACCEL = 52.48180821614297;
-    public static double MAX_ANG_VEL = Math.toRadians(184.02607784577722);
-    public static double MAX_ANG_ACCEL = Math.toRadians(184.02607784577722);
+    public static double MAX_VEL = 52.09776244331133;
+    public static double MAX_ACCEL = 52.09776244331133;
+    public static double MAX_ANG_VEL = Math.toRadians(250.58748);
+    public static double MAX_ANG_ACCEL = Math.toRadians(250.58748);
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
     public static double LATERAL_MULTIPLIER = 1;

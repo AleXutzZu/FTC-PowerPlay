@@ -111,6 +111,8 @@ public class RobotHardware {
      * This is the function that we initialize the Motors with
      **/
     public void initDrivetrainMotors() {
+        initLynxModule();
+
         leftFrontMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_front");
         leftBackMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_back");
         rightFrontMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_front");
@@ -148,7 +150,7 @@ public class RobotHardware {
         if (DriveConstants.RUN_USING_ENCODER) setAllMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         if (DriveConstants.RUN_USING_ENCODER && DriveConstants.MOTOR_VELO_PID != null) {
-            setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, DriveConstants.MOTOR_VELO_PID);
+            setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, DriveConstants.MOTOR_VELO_PID);
         }
 
         leftElevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

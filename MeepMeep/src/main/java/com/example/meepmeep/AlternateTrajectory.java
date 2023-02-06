@@ -1,14 +1,14 @@
 package com.example.meepmeep;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 public class AlternateTrajectory {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
+        MeepMeep meepMeep = new MeepMeep(600);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 .setConstraints(52.09776244331133, 52.09776244331133, 4.302544843778562, 4.302544843778562, 11.5)
@@ -30,9 +30,10 @@ public class AlternateTrajectory {
 
 
                                         .turn(Math.toRadians(45))
-                                        .lineTo(new Vector2d(-12, -30))
-                                        .splineToConstantHeading(new Vector2d(-35, -35), Math.toRadians(180))
-                                        .lineTo(new Vector2d(-60, -35))
+//                                        .lineTo(new Vector2d(-12, -30))
+//                                        .splineToConstantHeading(new Vector2d(-35, -35), Math.toRadians(180))
+//                                        .lineTo(new Vector2d(-60, -35))
+                                        .forward(45)
                                         .build()
 
             );
