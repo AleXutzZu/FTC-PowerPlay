@@ -42,8 +42,8 @@ public class DriveConstants {
     public static final double ELEVATOR_MAX_TICKS_PER_SECOND = ELEVATOR_MAX_RPM * ELEVATOR_TICKS_PER_REV / 60;
     public static final double CLAW_OPEN_POSITION = 0.15;
     public static final int CLAW_CLOSE_POSITION = 1;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(20, 0, 1.6,
-            12.888909298320863);
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25, 0, 4,
+            12.672978548719577);
 
     //
 
@@ -55,9 +55,9 @@ public class DriveConstants {
      * angular distances although most angular parameters are wrapped in Math.toRadians() for
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
-    public static double WHEEL_RADIUS = 1.88976; // in
-    public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 12; // in
+    public static double WHEEL_RADIUS = 1.8898; // in
+    public static double GEAR_RATIO = 1.01; // output (wheel) speed / input (motor) speed
+    public static double TRACK_WIDTH = 13.79; // in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -98,13 +98,13 @@ public class DriveConstants {
      * You are free to raise this on your own if you would like. It is best determined through experimentation.
 
      */
-    public static double MAX_VEL = 52.09776244331133;
-    public static double MAX_ACCEL = 52.09776244331133;
-    public static double MAX_ANG_VEL = Math.toRadians(250.58748);
-    public static double MAX_ANG_ACCEL = Math.toRadians(250.58748);
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
-    public static double LATERAL_MULTIPLIER = 1;
+    public static double MAX_VEL = 55.0632145392716184;
+    public static double MAX_ACCEL = 55.0632145392716184;
+    public static double MAX_ANG_VEL = 4.7961889775488435;
+    public static double MAX_ANG_ACCEL = 4.7961889775488435;
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
+    public static double LATERAL_MULTIPLIER = 1.192;
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
