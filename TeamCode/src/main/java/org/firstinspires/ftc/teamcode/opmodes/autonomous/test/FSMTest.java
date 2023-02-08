@@ -8,38 +8,51 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.control.AutonomousControl;
 import org.firstinspires.ftc.teamcode.control.Elevator;
 import org.firstinspires.ftc.teamcode.control.MecanumDriveController;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
 
 @Autonomous(name = "FSM Test", group = "Debugging")
 public class FSMTest extends AutonomousControl {
 
     private enum States {
-        START, GO_TO_HIGH_JUNCTION, PREPARE_TO_DROP_CONE,
-        DROP_CONE, ALIGN_TO_STACK_LINE, TURN_TO_STACK, GO_TO_STACK,
-        GO_TO_JUNCTION,
-        TAKE_CONE_FROM_STACK,
-        LIFT_CONE_FROM_STACK,
+        START, GO_TO_HIGH_JUNCTION_WITH_PRELOAD, ALIGN_TO_DROP_PRELOAD, DROP_PRELOAD, ALIGN_TO_STACK_PRELOAD,
+        TURN_TO_STACK_PRELOAD,
+        GO_TO_STACK,
+        GRIP_CONE_FROM_STACK, LIFT_CONE_FROM_STACK,
+        GO_TO_HIGH_JUNCTION, ALIGN_TO_DROP_CONE, DROP_CONE, ALIGN_TO_STACK, TURN_TO_STACK,
         PARK, IDLE
     }
 
-    private Trajectory goToHighJunctionTrajectory;
+    private Trajectory goToHighJunctionWithPreloadTrajectory;
     private final Pose2d startPose = new Pose2d(-35, -60.5, Math.toRadians(90));
 
     private Trajectory alignToDropPreloadTrajectory;
-    private Trajectory alignOnStackLineTrajectory;
+    private Trajectory alignOnStackLineAfterPreloadTrajectory;
 
-    private Trajectory goToStackTrajectory;
-    private Trajectory goToJunctionTrajectory;
+    private Trajectory goToStackAfterPreloadTrajectory;
+    private TrajectorySequence goToHighJunctionTrajectorySequence;
+
+    private Trajectory alignToDropConeTrajectory;
+
+    private Trajectory alignToStackLine;
+    private Trajectory goToStack;
+
+    private Trajectory parkingSpot1;
+    private Trajectory parkingSpot2;
+    private Trajectory parkingSpot3;
 
     private final ElapsedTime liftConeFromStackTimer = new ElapsedTime();
     private final ElapsedTime gripConeFromStackTimer = new ElapsedTime();
+    private final ElapsedTime runtime = new ElapsedTime();
+
+    private double stackTargetCm = 15;
 
     @Override
 
     protected void initTrajectories() {
         robotHardware.getMecanumDriveController().setPoseEstimate(startPose);
 
-        goToHighJunctionTrajectory = robotHardware.getMecanumDriveController()
+        goToHighJunctionWithPreloadTrajectory = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(startPose)
                 .lineTo(new Vector2d(-22.75, -60.5))
                 .splineToConstantHeading(new Vector2d(-13, -20), Math.toRadians(90))
@@ -47,90 +60,181 @@ public class FSMTest extends AutonomousControl {
                 .build();
 
         alignToDropPreloadTrajectory = robotHardware.getMecanumDriveController()
-                .trajectoryBuilder(goToHighJunctionTrajectory.end())
-                .forward(11, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5)).build();
+                .trajectoryBuilder(goToHighJunctionWithPreloadTrajectory.end())
+                .forward(11, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
+                .build();
 
-        alignOnStackLineTrajectory = robotHardware.getMecanumDriveController().trajectoryBuilder(alignToDropPreloadTrajectory.end())
-                .back(11).build();
+        alignOnStackLineAfterPreloadTrajectory = robotHardware.getMecanumDriveController().trajectoryBuilder(alignToDropPreloadTrajectory.end())
+                .back(11)
+                .build();
 
-        goToStackTrajectory = robotHardware.getMecanumDriveController()
-                .trajectoryBuilder(alignOnStackLineTrajectory.end().plus(new Pose2d(0, 0, Math.toRadians(45))))
-                .forward(48.5).build();
-        goToJunctionTrajectory = robotHardware.getMecanumDriveController()
-                .trajectoryBuilder(goToStackTrajectory.end())
-                .back(30).build();//TODO: tweak distance
+        goToStackAfterPreloadTrajectory = robotHardware.getMecanumDriveController()
+                .trajectoryBuilder(alignOnStackLineAfterPreloadTrajectory.end().plus(new Pose2d(0, 0, Math.toRadians(45))))
+                .forward(48.5)
+                .build();
+
+        goToHighJunctionTrajectorySequence = robotHardware.getMecanumDriveController()
+                .trajectorySequenceBuilder(goToStackAfterPreloadTrajectory.end())
+                .back(30)//24.5
+                .turn(Math.toRadians(-135))
+                .build();//TODO: tweak distance
+
+        alignToDropConeTrajectory = robotHardware.getMecanumDriveController()
+                .trajectoryBuilder(goToHighJunctionTrajectorySequence.end())
+                .forward(11, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
+                .build();
+
+        alignToStackLine = robotHardware.getMecanumDriveController()
+                .trajectoryBuilder(alignToDropConeTrajectory.end())
+                .back(11)
+                .build();
+
+        goToStack = robotHardware.getMecanumDriveController()
+                .trajectoryBuilder(alignToStackLine.end().plus(new Pose2d(0, 0, Math.toRadians(135))))
+                .forward(30)//24.5
+                .build();
+
+        parkingSpot1 = robotHardware.getMecanumDriveController()
+                .trajectoryBuilder(goToStack.start())
+                .forward(28)//TODO
+                .build();
+
+        parkingSpot2 = robotHardware.getMecanumDriveController()
+                .trajectoryBuilder(goToStack.start())
+                .forward(5)//TODO
+                .build();
+
+        parkingSpot3 = robotHardware.getMecanumDriveController()
+                .trajectoryBuilder(goToStack.start())
+                .back(18.5)//TODO
+                .build();
     }
 
     @Override
     protected void run() {
         States state = States.START;
 
-//        robotHardware.getElevatorController().setTarget(Elevator.ElevatorLevel.LOW);
 
         while (opModeIsActive()) {
             switch (state) {
                 case START:
-                    robotHardware.getMecanumDriveController().followTrajectoryAsync(goToHighJunctionTrajectory);
-                    robotHardware.getElevatorController().setTarget((int) DriveConstants.elevatorCmToTicks(3));
-                    state = States.GO_TO_HIGH_JUNCTION;
+                    runtime.reset();
+                    robotHardware.getElevatorController().setTarget((int) DriveConstants.elevatorCmToTicks(4));
+                    robotHardware.getMecanumDriveController().followTrajectoryAsync(goToHighJunctionWithPreloadTrajectory);
+                    state = States.GO_TO_HIGH_JUNCTION_WITH_PRELOAD;
                     break;
-                case GO_TO_HIGH_JUNCTION:
+                case GO_TO_HIGH_JUNCTION_WITH_PRELOAD:
                     if (!robotHardware.getMecanumDriveController().isBusy()) {
-                        state = States.PREPARE_TO_DROP_CONE;
-                        robotHardware.getMecanumDriveController().followTrajectoryAsync(alignToDropPreloadTrajectory);
+                        state = States.ALIGN_TO_DROP_PRELOAD;
                         robotHardware.getElevatorController().setTarget(Elevator.ElevatorLevel.HIGH);
+                        robotHardware.getMecanumDriveController().followTrajectoryAsync(alignToDropPreloadTrajectory);
                     }
                     break;
-                case PREPARE_TO_DROP_CONE:
+                case ALIGN_TO_DROP_PRELOAD:
                     if (!robotHardware.getMecanumDriveController().isBusy()) {
-                        state = States.DROP_CONE;
+                        state = States.DROP_PRELOAD;
+                        robotHardware.getClawsController().useClaws();
+                    }
+                    break;
+                case DROP_PRELOAD:
+                    state = States.ALIGN_TO_STACK_PRELOAD;
+                    robotHardware.getMecanumDriveController().followTrajectoryAsync(alignOnStackLineAfterPreloadTrajectory);
+                    break;
+
+                case ALIGN_TO_STACK_PRELOAD:
+                    if (!robotHardware.getMecanumDriveController().isBusy()) {
+                        state = States.TURN_TO_STACK_PRELOAD;
+                        robotHardware.getMecanumDriveController().turnAsync(Math.toRadians(45));
+                    }
+                    break;
+                case TURN_TO_STACK_PRELOAD:
+                    if (!robotHardware.getMecanumDriveController().isBusy()) {
+                        robotHardware.getElevatorController().setTarget((int) DriveConstants.elevatorCmToTicks(stackTargetCm));
+                        robotHardware.getMecanumDriveController().followTrajectoryAsync(goToStackAfterPreloadTrajectory);
+                        state = States.GO_TO_STACK;
+                        stackTargetCm -= 2.5;//TODO
                     }
                     break;
 
-                case DROP_CONE:
-                    robotHardware.getClawsController().useClaws();
-                    state = States.ALIGN_TO_STACK_LINE;
-                    robotHardware.getMecanumDriveController().followTrajectoryAsync(alignOnStackLineTrajectory);
-                    break;
-                case ALIGN_TO_STACK_LINE:
-                    if (!robotHardware.getMecanumDriveController().isBusy()) {
-                        robotHardware.getMecanumDriveController().turnAsync(Math.toRadians(45));
-                        state = States.TURN_TO_STACK;
-                    }
-                case TURN_TO_STACK:
-                    if (!robotHardware.getMecanumDriveController().isBusy()) {
-                        robotHardware.getMecanumDriveController().followTrajectoryAsync(goToStackTrajectory);
-                        robotHardware.getElevatorController().setTarget((int) DriveConstants.elevatorCmToTicks(14));
-                        state = States.GO_TO_STACK;
-                    }
-                    break;
                 case GO_TO_STACK:
                     if (!robotHardware.getMecanumDriveController().isBusy()) {
-                        state = States.LIFT_CONE_FROM_STACK;
-                        robotHardware.getClawsController().useClaws(false);
+                        state = States.GRIP_CONE_FROM_STACK;
                         gripConeFromStackTimer.reset();
+                        robotHardware.getClawsController().useClaws();
                     }
-                case LIFT_CONE_FROM_STACK:
+                    break;
+
+                case GRIP_CONE_FROM_STACK:
+                    //TODO
                     if (gripConeFromStackTimer.milliseconds() > 150) {
-                        robotHardware.getElevatorController().setTarget((int) DriveConstants.elevatorCmToTicks(24));
+                        robotHardware.getElevatorController().setTarget((int) DriveConstants.elevatorCmToTicks(stackTargetCm + 10));
+                        state = States.LIFT_CONE_FROM_STACK;
                         liftConeFromStackTimer.reset();
-                        state = States.TAKE_CONE_FROM_STACK;
                     }
                     break;
-                case TAKE_CONE_FROM_STACK:
-                    //Also check the length
+
+                case LIFT_CONE_FROM_STACK:
+                    //TODO
                     if (liftConeFromStackTimer.milliseconds() > 300) {
-                        state = States.GO_TO_JUNCTION;
-                        robotHardware.getMecanumDriveController().followTrajectoryAsync(goToJunctionTrajectory);
+                        robotHardware.getMecanumDriveController().followTrajectorySequenceAsync(goToHighJunctionTrajectorySequence);
+                        state = States.GO_TO_HIGH_JUNCTION;
                     }
                     break;
-                case GO_TO_JUNCTION:
+
+                case GO_TO_HIGH_JUNCTION:
+                    if (!robotHardware.getMecanumDriveController().isBusy()) {
+                        robotHardware.getElevatorController().setTarget(Elevator.ElevatorLevel.HIGH);
+                        robotHardware.getMecanumDriveController().followTrajectoryAsync(alignToDropConeTrajectory);
+                        state = States.ALIGN_TO_DROP_CONE;
+                    }
+                    break;
+                case ALIGN_TO_DROP_CONE:
+                    if (!robotHardware.getMecanumDriveController().isBusy()) {
+                        state = States.DROP_CONE;
+                        robotHardware.getClawsController().useClaws();
+                    }
+                    break;
+                case DROP_CONE:
+                    robotHardware.getMecanumDriveController().followTrajectoryAsync(alignToStackLine);
+                    state = States.ALIGN_TO_STACK;
+                    break;
+
+                case ALIGN_TO_STACK:
+                    if (!robotHardware.getMecanumDriveController().isBusy()) {
+                        robotHardware.getMecanumDriveController().turnAsync(Math.toRadians(135));
+                        state = States.TURN_TO_STACK;
+                    }
+                    break;
+                case TURN_TO_STACK:
+                    if (!robotHardware.getMecanumDriveController().isBusy()) {
+                        if (30f - runtime.seconds() > 5) {
+                            robotHardware.getElevatorController().setTarget((int) DriveConstants.elevatorCmToTicks(stackTargetCm));
+                            robotHardware.getMecanumDriveController().followTrajectoryAsync(goToStack);
+                            state = States.GO_TO_STACK;
+                            stackTargetCm -= 2.5;
+                        } else {
+                            state = States.PARK;
+                            switch (getParkingSpot()) {
+                                case ONE:
+                                    robotHardware.getMecanumDriveController().followTrajectoryAsync(parkingSpot1);
+                                    break;
+                                case TWO:
+                                    robotHardware.getMecanumDriveController().followTrajectoryAsync(parkingSpot2);
+                                    break;
+                                case THREE:
+                                    robotHardware.getMecanumDriveController().followTrajectoryAsync(parkingSpot3);
+                                    break;
+                            }
+                        }
+                    }
+                    break;
+                case PARK:
                     if (!robotHardware.getMecanumDriveController().isBusy()) {
                         state = States.IDLE;
+                        robotHardware.getClawsController().useClaws(true);
+                        robotHardware.getElevatorController().setTarget(Elevator.ElevatorLevel.BASE);
                     }
-                    break;
                 case IDLE:
-                    idle();
                     break;
             }
             robotHardware.getElevatorController().update();

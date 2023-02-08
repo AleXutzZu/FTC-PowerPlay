@@ -18,22 +18,14 @@ public class AlternateTrajectory {
                                         .splineToConstantHeading(new Vector2d(-13, -20), Math.toRadians(90))
                                         .splineToSplineHeading(new Pose2d(-12, -12, Math.toRadians(135)), Math.toRadians(90))
 
-                                        .forward(7)
-                                        .back(7)
+                                        .forward(11)
+                                        .back(11)
                                         .turn(Math.toRadians(45))
-                                        .forward(45)
+                                        .forward(48.5)
 
-                                        .back(45)
-                                        .turn(Math.toRadians(-45))
-                                        .forward(7)
-                                        .back(7)
-
-
-                                        .turn(Math.toRadians(45))
-//                                        .lineTo(new Vector2d(-12, -30))
-//                                        .splineToConstantHeading(new Vector2d(-35, -35), Math.toRadians(180))
-//                                        .lineTo(new Vector2d(-60, -35))
-                                        .forward(45)
+                                        .back(30)
+//                                        .turn(Math.toRadians(-135))
+                                        .back(18.5)
                                         .build()
 
             );
