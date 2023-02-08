@@ -72,4 +72,16 @@ public interface Elevator {
      * @return the current position in encoder ticks
      */
     int getCurrentPosition();
+
+    /**
+     * Checks if bypass limitations are active or not
+     * @return true if the bypass is enabled, false otherwise
+     */
+    boolean isBypass();
+
+    /**
+     * Enables or disabled elevator bypass limitations
+     * @param bypass true if the bypass should be enabled, false otherwise
+     */
+    void setBypass(boolean bypass);
 }

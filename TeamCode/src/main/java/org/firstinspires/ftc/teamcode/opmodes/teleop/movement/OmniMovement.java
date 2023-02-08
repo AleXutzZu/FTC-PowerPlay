@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop.movement;
 
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.control.Elevator;
 import org.firstinspires.ftc.teamcode.control.TeleOpControl;
 import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
@@ -37,7 +36,6 @@ public class OmniMovement extends TeleOpControl {
         }
 
         double elevatorTarget = robotHardware.getElevatorController().getTarget() + DriveConstants.elevatorCmToTicks(secondaryGamepad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) - secondaryGamepad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)) * ELEVATOR_SCALE;
-        elevatorTarget = Range.clip(elevatorTarget, DriveConstants.elevatorCmToTicks(Elevator.ElevatorLevel.BASE.getHeight()), DriveConstants.elevatorCmToTicks(Elevator.ElevatorLevel.MAX.getHeight()));
         robotHardware.getElevatorController().setTarget((int) elevatorTarget);
 
         robotHardware.getElevatorController().update();

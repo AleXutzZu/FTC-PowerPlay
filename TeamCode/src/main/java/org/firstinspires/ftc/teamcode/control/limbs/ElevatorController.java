@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.control.limbs;
 
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.qualcomm.robotcore.util.Range;
 import lombok.Getter;
 import org.firstinspires.ftc.teamcode.control.Elevator;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
@@ -11,6 +12,8 @@ public class ElevatorController implements Elevator {
     private int target = 0;
     @Getter
     private final PIDController pidController;
+
+    private boolean bypass = false;
 
     public ElevatorController(RobotHardware robotHardware) {
         this(robotHardware, 150);
@@ -38,6 +41,10 @@ public class ElevatorController implements Elevator {
 
     @Override
     public void setTarget(int target) {
+        if (!isBypass()) {
+            target = (int) Range.clip(target, DriveConstants.elevatorCmToTicks(ElevatorLevel.BASE.getHeight()), DriveConstants.elevatorCmToTicks(ElevatorLevel.MAX.getHeight()));
+        }
+
         this.target = target;
     }
 
@@ -54,5 +61,15 @@ public class ElevatorController implements Elevator {
     @Override
     public int getCurrentPosition() {
         return robotHardware.getLeftElevatorMotor().getCurrentPosition();
+    }
+
+    @Override
+    public boolean isBypass() {
+        return bypass;
+    }
+
+    @Override
+    public void setBypass(boolean bypass) {
+        this.bypass = bypass;
     }
 }
