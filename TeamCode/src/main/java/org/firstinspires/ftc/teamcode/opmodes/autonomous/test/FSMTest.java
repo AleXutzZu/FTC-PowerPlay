@@ -18,6 +18,7 @@ public class FSMTest extends AutonomousControl {
         DROP_CONE, ALIGN_TO_STACK_LINE, TURN_TO_STACK, GO_TO_STACK,
         GO_TO_JUNCTION,
         TAKE_CONE_FROM_STACK,
+        LIFT_CONE_FROM_STACK,
         PARK, IDLE
     }
 
@@ -30,7 +31,8 @@ public class FSMTest extends AutonomousControl {
     private Trajectory goToStackTrajectory;
     private Trajectory goToJunctionTrajectory;
 
-    private final ElapsedTime takeConeFromStackTimer = new ElapsedTime();
+    private final ElapsedTime liftConeFromStackTimer = new ElapsedTime();
+    private final ElapsedTime gripConeFromStackTimer = new ElapsedTime();
 
     @Override
 
@@ -46,7 +48,7 @@ public class FSMTest extends AutonomousControl {
 
         alignToDropPreloadTrajectory = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(goToHighJunctionTrajectory.end())
-                .forward(11, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5)).build();
+                .forward(11, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5)).build();
 
         alignOnStackLineTrajectory = robotHardware.getMecanumDriveController().trajectoryBuilder(alignToDropPreloadTrajectory.end())
                 .back(11).build();
@@ -104,16 +106,20 @@ public class FSMTest extends AutonomousControl {
                     break;
                 case GO_TO_STACK:
                     if (!robotHardware.getMecanumDriveController().isBusy()) {
-                        state = States.TAKE_CONE_FROM_STACK;
+                        state = States.LIFT_CONE_FROM_STACK;
                         robotHardware.getClawsController().useClaws(false);
-                        robotHardware.getElevatorController().setTarget((int) DriveConstants.elevatorCmToTicks(27));
-                        takeConeFromStackTimer.reset();
+                        gripConeFromStackTimer.reset();
+                    }
+                case LIFT_CONE_FROM_STACK:
+                    if (gripConeFromStackTimer.milliseconds() > 150) {
+                        robotHardware.getElevatorController().setTarget((int) DriveConstants.elevatorCmToTicks(24));
+                        liftConeFromStackTimer.reset();
+                        state = States.TAKE_CONE_FROM_STACK;
                     }
                     break;
                 case TAKE_CONE_FROM_STACK:
-                    //TODO: Check if more milliseconds are required not to knock down the stack
                     //Also check the length
-                    if (takeConeFromStackTimer.milliseconds() > 300) {
+                    if (liftConeFromStackTimer.milliseconds() > 300) {
                         state = States.GO_TO_JUNCTION;
                         robotHardware.getMecanumDriveController().followTrajectoryAsync(goToJunctionTrajectory);
                     }
