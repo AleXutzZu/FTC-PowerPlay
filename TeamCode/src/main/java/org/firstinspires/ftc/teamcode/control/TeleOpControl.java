@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.control;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
@@ -71,8 +70,6 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
             mainGamepad = aux;
         }
 
-        ToggleButtonReader mainDebugKey = new ToggleButtonReader(mainGamepad, GamepadKeys.Button.Y);
-        ToggleButtonReader secondaryDebugKey = new ToggleButtonReader(secondaryGamepad, GamepadKeys.Button.Y);
 
         if (skipInit) waitForStart();
         else {
@@ -91,11 +88,11 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
         while (opModeIsActive()) {
             run();
 
-            if (mainDebugKey.getState()) {
+            if (mainGamepad.wasJustReleased(GamepadKeys.Button.Y)) {
                 debugMainGamepad();
             }
 
-            if (secondaryDebugKey.getState()) {
+            if (secondaryGamepad.wasJustReleased(GamepadKeys.Button.Y)) {
                 debugSecondaryGamepad();
             }
 
@@ -103,8 +100,6 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
             telemetry.update();
             mainGamepad.readButtons();
             secondaryGamepad.readButtons();
-            mainDebugKey.readValue();
-            secondaryDebugKey.readValue();
         }
 
         if (isStopRequested()) {
@@ -187,10 +182,10 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
             targetRightBackPower /= max;
         }
 
-        targetRightBackPower*= POWER_SCALE;
-        targetRightFrontPower*= POWER_SCALE;
-        targetLeftFrontPower*= POWER_SCALE;
-        targetLeftBackPower*= POWER_SCALE;
+        targetRightBackPower *= POWER_SCALE;
+        targetRightFrontPower *= POWER_SCALE;
+        targetLeftFrontPower *= POWER_SCALE;
+        targetLeftBackPower *= POWER_SCALE;
 
         robotHardware.getLeftFrontMotor().setPower(targetLeftFrontPower);
         robotHardware.getRightFrontMotor().setPower(targetRightFrontPower);
