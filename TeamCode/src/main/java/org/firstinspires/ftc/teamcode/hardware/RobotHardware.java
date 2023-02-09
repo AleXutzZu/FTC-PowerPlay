@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import lombok.Getter;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.control.Claws;
+import org.firstinspires.ftc.teamcode.control.Elevator;
 import org.firstinspires.ftc.teamcode.control.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.control.limbs.ClawsController;
 import org.firstinspires.ftc.teamcode.control.limbs.ElevatorController;
@@ -78,9 +80,9 @@ public class RobotHardware {
     @Getter
     private WebcamName webcam = null;
     @Getter
-    private ElevatorController elevatorController = null;
+    private Elevator elevatorController = null;
     @Getter
-    private ClawsController clawsController = null;
+    private Claws clawsController = null;
 
     @Getter
     private final List<DcMotorEx> drivetrainMotors = new ArrayList<>();
