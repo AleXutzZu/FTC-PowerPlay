@@ -61,7 +61,7 @@ public class FSMTest extends AutonomousControl {
 
         alignToDropPreloadTrajectory = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(goToHighJunctionWithPreloadTrajectory.end())
-                .forward(11.23, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
+                .forward(11.23, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 8f))
                 .build();
 
         alignOnStackLineAfterPreloadTrajectory = robotHardware.getMecanumDriveController().trajectoryBuilder(alignToDropPreloadTrajectory.end())
@@ -101,12 +101,12 @@ public class FSMTest extends AutonomousControl {
 
         parkingSpot2 = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(goToStack.start())
-                .forward(2)//TODO
+                .forward(0.1)//TODO
                 .build();
 
         parkingSpot3 = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(goToStack.start())
-                .back(21)//TODO
+                .back(24)//TODO
                 .build();
     }
 
