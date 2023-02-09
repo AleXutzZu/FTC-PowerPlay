@@ -45,7 +45,7 @@ public class FSMTest extends AutonomousControl {
     private final ElapsedTime gripConeFromStackTimer = new ElapsedTime();
     private final ElapsedTime runtime = new ElapsedTime();
 
-    private double stackTargetCm = 15;
+    private double stackTargetCm = 11;
 
     @Override
 
@@ -61,52 +61,52 @@ public class FSMTest extends AutonomousControl {
 
         alignToDropPreloadTrajectory = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(goToHighJunctionWithPreloadTrajectory.end())
-                .forward(11, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
+                .forward(11.23, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
                 .build();
 
         alignOnStackLineAfterPreloadTrajectory = robotHardware.getMecanumDriveController().trajectoryBuilder(alignToDropPreloadTrajectory.end())
-                .back(11)
+                .back(11.23)
                 .build();
 
         goToStackAfterPreloadTrajectory = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(alignOnStackLineAfterPreloadTrajectory.end().plus(new Pose2d(0, 0, Math.toRadians(45))))
-                .forward(48.5)
+                .forward(49)
                 .build();
 
         goToHighJunctionTrajectorySequence = robotHardware.getMecanumDriveController()
                 .trajectorySequenceBuilder(goToStackAfterPreloadTrajectory.end())
-                .back(30)//24.5
+                .back(25)//24.5
                 .turn(Math.toRadians(-135))
                 .build();//TODO: tweak distance
 
         alignToDropConeTrajectory = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(goToHighJunctionTrajectorySequence.end())
-                .forward(11, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
+                .forward(11.1, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
                 .build();
 
         alignToStackLine = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(alignToDropConeTrajectory.end())
-                .back(11)
+                .back(11.1)
                 .build();
 
         goToStack = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(alignToStackLine.end().plus(new Pose2d(0, 0, Math.toRadians(135))))
-                .forward(30)//24.5
+                .forward(26)//24.5
                 .build();
 
         parkingSpot1 = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(goToStack.start())
-                .forward(28)//TODO
+                .forward(20)
                 .build();
 
         parkingSpot2 = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(goToStack.start())
-                .forward(5)//TODO
+                .forward(2)//TODO
                 .build();
 
         parkingSpot3 = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(goToStack.start())
-                .back(18.5)//TODO
+                .back(21)//TODO
                 .build();
     }
 
@@ -166,8 +166,8 @@ public class FSMTest extends AutonomousControl {
 
                 case GRIP_CONE_FROM_STACK:
                     //TODO
-                    if (gripConeFromStackTimer.milliseconds() > 150) {
-                        robotHardware.getElevatorController().setTarget((int) DriveConstants.elevatorCmToTicks(stackTargetCm + 10));
+                    if (gripConeFromStackTimer.milliseconds() > 350) {
+                        robotHardware.getElevatorController().setTarget((int) DriveConstants.elevatorCmToTicks(stackTargetCm + 25));
                         state = States.LIFT_CONE_FROM_STACK;
                         liftConeFromStackTimer.reset();
                     }
@@ -175,7 +175,7 @@ public class FSMTest extends AutonomousControl {
 
                 case LIFT_CONE_FROM_STACK:
                     //TODO
-                    if (liftConeFromStackTimer.milliseconds() > 300) {
+                    if (liftConeFromStackTimer.milliseconds() > 600) {
                         robotHardware.getMecanumDriveController().followTrajectorySequenceAsync(goToHighJunctionTrajectorySequence);
                         state = States.GO_TO_HIGH_JUNCTION;
                     }
