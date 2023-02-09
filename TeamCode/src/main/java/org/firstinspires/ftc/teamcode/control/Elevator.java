@@ -40,11 +40,6 @@ public interface Elevator {
     }
 
     /**
-     * Homes the elevator and resets the encoder output
-     */
-    void home();
-
-    /**
      * Updates the motor power to match the target. Must be called in a loop.
      */
     void update();

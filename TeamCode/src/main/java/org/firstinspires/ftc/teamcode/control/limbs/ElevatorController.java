@@ -26,11 +26,6 @@ public class ElevatorController implements Elevator {
     }
 
     @Override
-    public void home() {
-
-    }
-
-    @Override
     public void update() {
         //transform velocity to ratio
         double calculatedPower = pidController.calculate(robotHardware.getLeftElevatorMotor().getCurrentPosition(), target) / DriveConstants.ELEVATOR_MAX_TICKS_PER_SECOND;
