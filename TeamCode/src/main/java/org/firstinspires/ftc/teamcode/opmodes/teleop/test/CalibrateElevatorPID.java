@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.control.limbs.ElevatorController;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
 
@@ -25,6 +26,12 @@ public class CalibrateElevatorPID extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robotHardware.initDrivetrainMotors();
 
+        ElevatorController controller = null;
+        if (robotHardware.getElevatorController() instanceof ElevatorController) {
+            controller = (ElevatorController) robotHardware.getElevatorController();
+        }
+
+        if (controller == null) throw new NullPointerException("Unknown Controller");
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         boolean targetState = true;
@@ -49,9 +56,9 @@ public class CalibrateElevatorPID extends LinearOpMode {
             robotHardware.getElevatorController().setTarget((targetPosition));
             telemetry.addData("targetPosition", targetPosition);
             telemetry.addData("actualPosition", robotHardware.getElevatorController().getCurrentPosition());
-            robotHardware.getElevatorController().getPidController().setPID(kP, kI, kD);
+            controller.getPidController().setPID(kP, kI, kD);
 
-            PIDController pidController = robotHardware.getElevatorController().getPidController();
+            PIDController pidController = controller.getPidController();
             PIDFCoefficients coefficients = new PIDFCoefficients(pidController.getP(), pidController.getI(), pidController.getD(), pidController.getF());
 
             robotHardware.getLeftElevatorMotor().setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, coefficients);
