@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.autonomous.test;
+package org.firstinspires.ftc.teamcode.opmodes.autonomous.regio;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.control.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
 
-@Autonomous(name = "FSM Test", group = "Debugging")
-public class FSMTest extends AutonomousControl {
+@Autonomous(name = "Left Side Autonomous", group = "Regio")
+public class LeftSideAuto extends AutonomousControl {
 
     private enum States {
         START, GO_TO_HIGH_JUNCTION_WITH_PRELOAD, ALIGN_TO_DROP_PRELOAD, DROP_PRELOAD, ALIGN_TO_STACK_PRELOAD,
