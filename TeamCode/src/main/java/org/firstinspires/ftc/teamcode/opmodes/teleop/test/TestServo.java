@@ -13,7 +13,6 @@ public class TestServo extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Servo servo = hardwareMap.get(Servo.class, "servo");
-        servo.scaleRange(1f / 60f, 1f / 15f);
 
         GamepadEx gamepad = new GamepadEx(gamepad1);
 
@@ -40,6 +39,7 @@ public class TestServo extends LinearOpMode {
             }
 
             if (gamepad.wasJustReleased(GamepadKeys.Button.A)) {
+                //Clip position to 0-1
                 servo.setPosition(position);
             }
 

@@ -1,11 +1,22 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.*;
-
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import lombok.Getter;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.control.Claws;
+import org.firstinspires.ftc.teamcode.control.Elevator;
+import org.firstinspires.ftc.teamcode.control.MecanumDriveController;
+import org.firstinspires.ftc.teamcode.control.limbs.ClawsController;
+import org.firstinspires.ftc.teamcode.control.limbs.ElevatorController;
+import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <h1>This class can be used to define all the specific hardware for the Perpetuum Mobile Robot.</h1>
@@ -17,11 +28,13 @@ import lombok.Getter;
  * <pre>Right front motor:                                  <i>"right_front"</i></pre>
  * <pre>Right back motor:                                   <i>"right_back"</i></pre>
  * <pre>Left front motor:                                   <i>"left_front"</i></pre>
- * <pre>Left back motor:                                    <i>"right_back"</i></pre>
+ * <pre>Left back motor:                                    <i>"left_back"</i></pre>
  * <h3>Motor for using the elevator</h3>
  * <pre>Left elevator motor:                             <i>"left_elevator"</i></pre>
  * <pre>Right elevator motor:                           <i>"right_elevator"</i></pre>
  * <br>
+ * <h2> Servos </h2>
+ * <pre> Claw servo:                                        <i> "claw"</i> </pre>
  * <h2>Sensors and misc</h2>
  * <h3>2M Distance Sensors</h3>
  * <pre>Left side sensor                                    <i>"left_2m"</i></pre>
@@ -30,9 +43,7 @@ import lombok.Getter;
  * <h3>Misc</h3>
  * <pre>BNO55IMU Gyroscope                                  <i>"imu"</i></pre>
  */
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import lombok.Getter;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 
 public class RobotHardware {
     /**
@@ -57,9 +68,7 @@ public class RobotHardware {
     @Getter
     private DcMotorEx rightElevatorMotor = null;
     @Getter
-    private Servo leftClawServo = null;
-    @Getter
-    private Servo rightClawServo = null;
+    private Servo clawServo = null;
     @Getter
     private Rev2mDistanceSensor right2mSensor = null;
     @Getter
@@ -70,12 +79,42 @@ public class RobotHardware {
     private BNO055IMU imu = null;
     @Getter
     private WebcamName webcam = null;
+    @Getter
+    private Elevator elevatorController = null;
+    @Getter
+    private Claws clawsController = null;
 
+    @Getter
+    private final List<DcMotorEx> drivetrainMotors = new ArrayList<>();
+    @Getter
+    private VoltageSensor batteryVoltageSensor = null;
+
+    @Getter
+    private MecanumDriveController mecanumDriveController = null;
+
+    /**
+     * Sets bulk caching to AUTO and saves the voltage sensor to the field.
+     */
+    public void initLynxModule() {
+        batteryVoltageSensor = opMode.hardwareMap.voltageSensor.iterator().next();
+
+        for (LynxModule module : opMode.hardwareMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
+    }
+
+    public void initMecanumDriveController() {
+        initDrivetrainMotors();
+        initIMU();
+        mecanumDriveController = new MecanumDriveController(this);
+    }
 
     /**
      * This is the function that we initialize the Motors with
      **/
     public void initDrivetrainMotors() {
+        initLynxModule();
+
         leftFrontMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_front");
         leftBackMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_back");
         rightFrontMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_front");
@@ -83,46 +122,85 @@ public class RobotHardware {
         leftElevatorMotor = opMode.hardwareMap.get(DcMotorEx.class, "left_elevator");
         rightElevatorMotor = opMode.hardwareMap.get(DcMotorEx.class, "right_elevator");
 
-        leftClawServo = opMode.hardwareMap.get(Servo.class, "left_claw");
-        rightClawServo = opMode.hardwareMap.get(Servo.class, "right_claw");
+        drivetrainMotors.add(leftFrontMotor);
+        drivetrainMotors.add(leftBackMotor);
+        drivetrainMotors.add(rightBackMotor);
+        drivetrainMotors.add(rightFrontMotor);
 
-        leftClawServo.setDirection(Servo.Direction.REVERSE);
+        for (DcMotorEx motor : drivetrainMotors) {
+            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
+            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
+            motor.setMotorType(motorConfigurationType);
+        }
 
-        //Approx 30 deg - 120 deg
-        leftClawServo.scaleRange(1f / 60f, 1f / 15f);
-        rightClawServo.scaleRange(1f / 60f, 1f / 15f);
-
-        //TODO: Update the class documentation to contain the servos and test if any of them should be reversed
 
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFrontMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightBackMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftElevatorMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         rightElevatorMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setAllMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftElevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightElevatorMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        setAllMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        leftFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFrontMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        if (DriveConstants.RUN_USING_ENCODER) setAllMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        leftElevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightElevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        if (DriveConstants.RUN_USING_ENCODER && DriveConstants.MOTOR_VELO_PID != null) {
+            setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, DriveConstants.MOTOR_VELO_PID);
+        }
 
-        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftElevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightElevatorMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        setAllBrake();
         leftElevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightElevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        elevatorController = new ElevatorController(this);
+        clawsController = new ClawsController(this);
+    }
+
+    public void setAllMode(DcMotor.RunMode mode) {
+        drivetrainMotors.forEach(dcMotorEx -> dcMotorEx.setMode(mode));
+    }
+
+    public void setAllBrake() {
+        drivetrainMotors.forEach(dcMotorEx -> dcMotorEx.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
+    }
+
+    public void setAllPowers(double v, double v1, double v2, double v3) {
+        leftFrontMotor.setPower(v);
+        leftBackMotor.setPower(v1);
+        rightBackMotor.setPower(v2);
+        rightFrontMotor.setPower(v3);
+    }
+
+    public void setPIDFCoefficients(DcMotor.RunMode runMode, PIDFCoefficients coefficients) {
+        PIDFCoefficients compensatedCoefficients = new PIDFCoefficients(
+                coefficients.p, coefficients.i, coefficients.d,
+                coefficients.f * 12 / batteryVoltageSensor.getVoltage()
+        );
+
+        drivetrainMotors.forEach(dcMotorEx -> dcMotorEx.setPIDFCoefficients(runMode, compensatedCoefficients));
+    }
+
+    /**
+     * This is the function that we initialize the Claws with
+     */
+
+    public void initClaws() {
+
+        clawServo = opMode.hardwareMap.get(Servo.class, "claw");
+
+
+        //Approx 36 - 130 deg
+        clawServo.scaleRange(0.02, 0.072);
     }
 
     /**
@@ -142,17 +220,15 @@ public class RobotHardware {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
-
-        //TODO Remap axis if the orientation of the hub using the IMU is not placed with the +Z upwards
     }
 
     /**
      * Initialize all required hardware for the Autonomous Period
      */
     public void initAutonomous() {
-        initDrivetrainMotors();
-        initIMU();
-        initSensors();
+        initMecanumDriveController();
+        initClaws();
+//        initSensors();
         initWebcam();
     }
 
@@ -161,6 +237,7 @@ public class RobotHardware {
      */
     public void initTeleOp() {
         initDrivetrainMotors();
+        initClaws();
     }
 
     public void initWebcam() {
