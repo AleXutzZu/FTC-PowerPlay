@@ -5,7 +5,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
 @TeleOp(name = "Test Claw", group = "Debugging")
@@ -33,12 +32,10 @@ public class TestClaw extends LinearOpMode {
 
             if (gamepad.wasJustReleased(GamepadKeys.Button.X)) {
                 if (state) {
-                    robotHardware.getLeftClawServo().setPosition(0);
-                    robotHardware.getRightClawServo().setPosition(0);
+                    robotHardware.getClawServo().setPosition(0);
                     state=false;
                 } else {
-                    robotHardware.getLeftClawServo().setPosition(1);
-                    robotHardware.getRightClawServo().setPosition(1);
+                    robotHardware.getClawServo().setPosition(1);
                     state=true;
                 }
             }
