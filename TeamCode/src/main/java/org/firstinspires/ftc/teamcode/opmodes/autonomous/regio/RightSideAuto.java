@@ -70,7 +70,7 @@ public class RightSideAuto extends AutonomousControl {
 
         goToStackAfterPreloadTrajectory = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(alignOnStackLineAfterPreloadTrajectory.end().plus(new Pose2d(0, 0, Math.toRadians(-45))))
-                .forward(49)
+                .forward(49.6)
                 .build();
 
         goToHighJunctionTrajectorySequence = robotHardware.getMecanumDriveController()
@@ -81,17 +81,17 @@ public class RightSideAuto extends AutonomousControl {
 
         alignToDropConeTrajectory = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(goToHighJunctionTrajectorySequence.end())
-                .forward(11.1, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
+                .forward(9.6, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
                 .build();
 
         alignToStackLine = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(alignToDropConeTrajectory.end())
-                .back(10.7)
+                .back(9.6)
                 .build();
 
         goToStack = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(alignToStackLine.end().plus(new Pose2d(0, 0, Math.toRadians(-135))))
-                .forward(27)//24.5
+                .forward(26.9)//24.5
                 .build();
 
         parkingSpot1 = robotHardware.getMecanumDriveController()
