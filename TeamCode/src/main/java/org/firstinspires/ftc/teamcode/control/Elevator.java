@@ -23,7 +23,7 @@ public interface Elevator {
         /**
          * The highest level of the elevator (slightly above the tallest bar)
          */
-        HIGH(85.9),
+        HIGH(88),
 
         /**
          * Maximum allowed level the elevator might go to
