@@ -45,7 +45,7 @@ public class LeftSideAuto extends AutonomousControl {
     private final ElapsedTime gripConeFromStackTimer = new ElapsedTime();
     private final ElapsedTime runtime = new ElapsedTime();
 
-    private double stackTargetCm = 11;
+    private double stackTargetCm = 12;
 
     @Override
 
@@ -56,16 +56,16 @@ public class LeftSideAuto extends AutonomousControl {
                 .trajectoryBuilder(startPose)
                 .lineTo(new Vector2d(-22.75, -60.5))
                 .splineToConstantHeading(new Vector2d(-13, -20), Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(-12, -12, Math.toRadians(135)), Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(-12, -11, Math.toRadians(135)), Math.toRadians(90))
                 .build();
 
         alignToDropPreloadTrajectory = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(goToHighJunctionWithPreloadTrajectory.end())
-                .forward(11.23, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
+                .forward(10, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
                 .build();
 
         alignOnStackLineAfterPreloadTrajectory = robotHardware.getMecanumDriveController().trajectoryBuilder(alignToDropPreloadTrajectory.end())
-                .back(11.23)
+                .back(9)
                 .build();
 
         goToStackAfterPreloadTrajectory = robotHardware.getMecanumDriveController()
@@ -75,18 +75,18 @@ public class LeftSideAuto extends AutonomousControl {
 
         goToHighJunctionTrajectorySequence = robotHardware.getMecanumDriveController()
                 .trajectorySequenceBuilder(goToStackAfterPreloadTrajectory.end())
-                .back(25)//24.5
+                .back(25.5)//24.5
                 .turn(Math.toRadians(-135))
                 .build();//TODO: tweak distance
 
         alignToDropConeTrajectory = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(goToHighJunctionTrajectorySequence.end())
-                .forward(11.1, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
+                .forward(10, MecanumDriveController.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL), MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL / 5))
                 .build();
 
         alignToStackLine = robotHardware.getMecanumDriveController()
                 .trajectoryBuilder(alignToDropConeTrajectory.end())
-                .back(11.1)
+                .back(10)
                 .build();
 
         goToStack = robotHardware.getMecanumDriveController()
