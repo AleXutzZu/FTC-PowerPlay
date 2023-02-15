@@ -1,23 +1,17 @@
-package org.firstinspires.ftc.teamcode.opmodes.autonomous.test;
+package org.firstinspires.ftc.teamcode.opmodes.autonomous.regio;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.apache.commons.math3.analysis.function.Constant;
 import org.firstinspires.ftc.teamcode.control.AutonomousControl;
 import org.firstinspires.ftc.teamcode.control.Elevator;
 import org.firstinspires.ftc.teamcode.control.MecanumDriveController;
-import org.firstinspires.ftc.teamcode.opmodes.autonomous.regio.LeftSideAuto;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
 
-import javax.xml.parsers.FactoryConfigurationError;
-
-@Autonomous(name = "Third Trajectory Debugging", group = "Debugging", preselectTeleOp = "OmniMovement")
-public class AlternateTrajectoryTest extends AutonomousControl {
+@Autonomous(name = "Left Side Auto Nebuna", group = "Debugging", preselectTeleOp = "OmniMovement")
+public class RegioLeftSideAuto extends AutonomousControl {
 
     private final Pose2d startPose = new Pose2d(-35, -60.5, Math.toRadians(90));
 
@@ -74,7 +68,7 @@ public class AlternateTrajectoryTest extends AutonomousControl {
                 .setReversed(true)
                 .setAccelConstraint(MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL * 0.4))
                 .setVelConstraint(MecanumDriveController.getVelocityConstraint(DriveConstants.MAX_VEL * 0.7, DriveConstants.MAX_ANG_VEL))
-                .splineToLinearHeading(new Pose2d(-26.5, -6.5, Math.toRadians(45)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-26, -6, Math.toRadians(45)), Math.toRadians(90))
                 .addSpatialMarker(new Vector2d(-47, -13), () -> robotHardware.getElevatorController().setTarget(Elevator.ElevatorLevel.HIGH))
                 .build();
         parkingSpot1 = robotHardware.getMecanumDriveController()
