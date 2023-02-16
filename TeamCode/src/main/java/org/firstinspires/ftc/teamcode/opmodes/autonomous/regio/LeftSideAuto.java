@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.control.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
 
-@Autonomous(name = "Left Side Autonomous", group = "Regio")
+@Autonomous(name = "Left Side Autonomous", group = "Regio", preselectTeleOp = "Omni Movement")
 public class LeftSideAuto extends AutonomousControl {
 
     private enum States {

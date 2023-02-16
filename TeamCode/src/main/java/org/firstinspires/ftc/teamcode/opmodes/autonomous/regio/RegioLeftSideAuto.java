@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.control.MecanumDriveController;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.util.constants.DriveConstants;
 
-@Autonomous(name = "Left Side Auto Nebuna", group = "Debugging", preselectTeleOp = "OmniMovement")
+@Autonomous(name = "Left Side Auto Nebuna", group = "Regio", preselectTeleOp = "Omni Movement")
 public class RegioLeftSideAuto extends AutonomousControl {
 
     private final Pose2d startPose = new Pose2d(-35, -60.5, Math.toRadians(90));
