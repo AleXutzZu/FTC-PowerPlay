@@ -35,6 +35,10 @@ public class OmniMovement extends TeleOpControl {
 
         drive(axial, lateral, yaw);
 
+        if(mainGamepad.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)){
+            changeSensitivity();
+        }
+
         if (secondaryGamepad.wasJustReleased(GamepadKeys.Button.A)) {
             robotHardware.getClawsController().useClaws();
         }

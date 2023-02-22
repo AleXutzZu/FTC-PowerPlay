@@ -193,6 +193,14 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
         robotHardware.getRightBackMotor().setPower(targetRightBackPower);
     }
 
+    public void changeSensitivity() {
+        if (POWER_SCALE == 1)
+            POWER_SCALE = 0.25;
+        else {
+            POWER_SCALE = 1;
+        }
+    }
+
     @Override
     public void drive(double leftFront, double rightFront, double leftBack, double rightBack) {
         robotHardware.getLeftFrontMotor().setPower(leftFront);
@@ -201,5 +209,5 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
         robotHardware.getRightBackMotor().setPower(rightBack);
     }
 
-    private static final double POWER_SCALE = 1;
+    private static double POWER_SCALE = 1;
 }
