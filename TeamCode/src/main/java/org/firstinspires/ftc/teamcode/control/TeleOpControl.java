@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.control;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import lombok.Getter;
+import lombok.Setter;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.hardware.RobotHardware;
 
@@ -182,10 +184,10 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
             targetRightBackPower /= max;
         }
 
-        targetRightBackPower *= POWER_SCALE;
-        targetRightFrontPower *= POWER_SCALE;
-        targetLeftFrontPower *= POWER_SCALE;
-        targetLeftBackPower *= POWER_SCALE;
+        targetRightBackPower *= powerScale;
+        targetRightFrontPower *= powerScale;
+        targetLeftFrontPower *= powerScale;
+        targetLeftBackPower *= powerScale;
 
         robotHardware.getLeftFrontMotor().setPower(targetLeftFrontPower);
         robotHardware.getRightFrontMotor().setPower(targetRightFrontPower);
@@ -193,13 +195,6 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
         robotHardware.getRightBackMotor().setPower(targetRightBackPower);
     }
 
-    public void changeSensitivity() {
-        if (POWER_SCALE == 1)
-            POWER_SCALE = 0.25;
-        else {
-            POWER_SCALE = 1;
-        }
-    }
 
     @Override
     public void drive(double leftFront, double rightFront, double leftBack, double rightBack) {
@@ -209,5 +204,7 @@ public abstract class TeleOpControl extends LinearOpMode implements Drivetrain {
         robotHardware.getRightBackMotor().setPower(rightBack);
     }
 
-    private static double POWER_SCALE = 1;
+    @Setter
+    @Getter
+    private double powerScale = 1;
 }
