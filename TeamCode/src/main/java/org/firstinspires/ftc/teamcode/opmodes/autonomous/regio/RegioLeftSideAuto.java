@@ -50,9 +50,13 @@ public class RegioLeftSideAuto extends AutonomousControl {
 
         alignToStackTrajectory = robotHardware.getMecanumDriveController()
                 .trajectorySequenceBuilder(goToJunctionWithPreloadTrajectory.end())
-                .setReversed(true)
                 .setAccelConstraint(MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL * 0.5))
-                .splineToLinearHeading(new Pose2d(-55, -11.7, Math.toRadians(180)), Math.toRadians(180))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(-30.5,-7,Math.toRadians(45)),Math.toRadians(45))
+                .setReversed(false)
+                .splineToSplineHeading(new Pose2d(-34.5,-14.7,Math.toRadians(135)),Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-55,-11.7,Math.toRadians(180)),Math.toRadians(180))
+                .forward(5)
                 .addSpatialMarker(new Vector2d(-39, -10.6), () -> {
                     robotHardware.getElevatorController().setTarget((int) DriveConstants.elevatorCmToTicks(stackTargetCm));
                     stackTargetCm -= 2.5;
@@ -68,7 +72,8 @@ public class RegioLeftSideAuto extends AutonomousControl {
                 .setReversed(true)
                 .setAccelConstraint(MecanumDriveController.getAccelerationConstraint(DriveConstants.MAX_ACCEL * 0.4))
                 .setVelConstraint(MecanumDriveController.getVelocityConstraint(DriveConstants.MAX_VEL * 0.7, DriveConstants.MAX_ANG_VEL))
-                .splineToLinearHeading(new Pose2d(-26, -6, Math.toRadians(45)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-40,-11.7,Math.toRadians(180)),Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-29, -7, Math.toRadians(45)), Math.toRadians(45))
                 .addSpatialMarker(new Vector2d(-47, -13), () -> robotHardware.getElevatorController().setTarget(Elevator.ElevatorLevel.HIGH))
                 .build();
         parkingSpot1 = robotHardware.getMecanumDriveController()

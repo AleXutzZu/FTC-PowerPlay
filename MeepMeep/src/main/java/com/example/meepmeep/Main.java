@@ -24,7 +24,7 @@ public class Main {
                                 .splineToSplineHeading(new Pose2d(-34.5,-14.7,Math.toRadians(135)),Math.toRadians(180))
                                 .splineToSplineHeading(new Pose2d(-55,-11.7,Math.toRadians(180)),Math.toRadians(180))
                                 .forward(5)
-                                 .splineToLinearHeading(new Pose2d(-40,-11.7,Math.toRadians(180)),Math.toRadians(0))
+                                .splineToLinearHeading(new Pose2d(-40,-11.7,Math.toRadians(180)),Math.toRadians(0))
                                 .splineToSplineHeading(new Pose2d(-29, -7, Math.toRadians(45)), Math.toRadians(45))
                                 .build());
 
